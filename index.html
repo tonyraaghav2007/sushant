@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Wedding Invitation • Nishant &amp; Shweta</title>
+  <meta name="description" content="Together with our families, we joyfully invite you to celebrate the wedding of Nishant &amp; Shweta on Saturday, 12 December 2026 at Bhanushali Wadi Banquet Hall, Nerul, Navi Mumbai.">
+  <meta property="og:title" content="Wedding Invitation • Nishant &amp; Shweta">
+  <meta property="og:description" content="Two souls. One promise. A lifetime together. Open our interactive royal wedding invitation card.">
+
+  <!-- Google Fonts: Ultra-Sharp Luxury Royal Serif & Calligraphy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Atmospheric Background Canvas & Layers -->
+  <div class="ambient-bg" aria-hidden="true"></div>
+  <canvas id="petals-canvas" aria-hidden="true"></canvas>
+
+  <!-- Top Floating Utilities (Music & Petals in top-right) -->
+  <div class="floating-controls" role="toolbar" aria-label="Audio and Effects Controls">
+    <button type="button" class="floating-btn" id="btn-toggle-music" title="Play Traditional Shehnai &amp; Sitar Music" aria-label="Toggle Wedding Music">
+      <svg class="audio-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18V5l12-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zm12-2a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      <span class="audio-label">Music: Off</span>
+    </button>
+    <button type="button" class="floating-btn active" id="btn-toggle-petals" title="Toggle Floating Petals" aria-label="Toggle Petal Shower">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/>
+      </svg>
+      <span class="petal-label">Petals: On</span>
+    </button>
+  </div>
+
+  <!-- ========================================================
+       MAIN 3D CARD STAGE (Cursor Reactive & Scroll Flipbook)
+       ======================================================== -->
+  <main class="card-world-stage" id="card-world">
+    
+    <!-- 3D Parallax Tilt Container (Reacts to Cursor) -->
+    <div class="tilt-container" id="tilt-box">
+      
+      <!-- Dynamic Specular Foil Light Reflection -->
+      <div class="specular-foil-glint" id="foil-glint" aria-hidden="true"></div>
+
+      <!-- ====================================================
+           PHASE 1: THE ROYAL ENVELOPE / SLEEVE
+           ==================================================== -->
+      <div class="royal-envelope-sleeve" id="royal-envelope">
+        
+        <!-- High-Definition Outer Card Cover -->
+        <div class="envelope-card-surface">
+          <div class="card-gilded-frame" aria-hidden="true"></div>
+          
+          <svg class="ganesha-emblem" viewBox="0 0 100 100" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round">
+            <path d="M50 15 C42 15 36 22 36 30 C36 40 44 46 50 46 C56 46 64 40 64 30 C64 22 58 15 50 15 Z" fill="rgba(212,175,55,0.1)"/>
+            <path d="M50 30 C46 36 46 48 48 58 C50 66 52 72 48 76 C44 80 38 78 36 74"/>
+            <path d="M36 28 C26 26 22 36 26 44 C30 50 36 50 38 46"/>
+            <path d="M64 28 C74 26 78 36 74 44 C70 50 64 50 62 46"/>
+            <circle cx="50" cy="22" r="2.5" fill="#D4AF37"/>
+          </svg>
+
+          <p class="shubh-shloka">॥ श्री गणेशाय नमः ॥</p>
+          <p class="card-intro-text">
+            TOGETHER WITH OUR FAMILIES<br>
+            WE JOYFULLY INVITE YOU TO<br>
+            CELEBRATE THE WEDDING OF
+          </p>
+
+          <div class="couple-title-block">
+            <h1 class="groom-name">NISHANT</h1>
+            <span class="script-and">and</span>
+            <h1 class="bride-name">SHWETA</h1>
+          </div>
+
+          <div class="couple-tagline">
+            <span>TWO SOULS. ONE PROMISE.</span>
+            <span class="couple-sub-script">a lifetime together.</span>
+          </div>
+
+          <div class="lotus-divider" aria-hidden="true">
+            <span class="lotus-line"></span>
+            <svg class="lotus-icon" viewBox="0 0 24 24"><path d="M12 2c1.5 3 4 5 7 6-2 3-5 5-7 10-2-5-5-7-7-10 3-1 5.5-3 7-6z"/></svg>
+            <span class="lotus-line"></span>
+          </div>
+
+          <div class="card-save-date-block">
+            <div class="std-label">SAVE THE DATE</div>
+            <div class="date-split-row">
+              <span class="date-day-col">SATURDAY</span>
+              <span class="date-number">12</span>
+              <span class="date-month-col">DECEMBER</span>
+            </div>
+            <div class="date-year">2 0 2 6</div>
+          </div>
+
+          <div class="cover-venue-snippet">
+            <h2 class="cover-venue-name">BHANUSHALI WADI BANQUET HALL</h2>
+            <p class="cover-venue-address">
+              BASTESHWAR MAHARAJ MARG, NERUL EAST,<br>
+              SECTOR 10A, NERUL, NAVI MUMBAI 400706
+            </p>
+            <p class="cover-timing">TIMING :— 12 PM ONWARDS</p>
+          </div>
+
+          <div class="palace-sketch-wrapper">
+            <img src="assets/images/palace_vintage_sketch.jpg" alt="Vintage Lake Palace Sketch" class="card-vintage-palace-sketch" loading="eager">
+          </div>
+        </div>
+
+        <!-- 3D Scalloped Flap -->
+        <div class="envelope-flap-3d" id="envelope-flap">
+          <div class="flap-inside-silk" aria-hidden="true"></div>
+          <div class="flap-outside-arch">
+            <svg class="flap-ganesha-mini" viewBox="0 0 100 100" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round">
+              <path d="M50 15 C42 15 36 22 36 30 C36 40 44 46 50 46 C56 46 64 40 64 30 C64 22 58 15 50 15 Z" fill="rgba(212,175,55,0.1)"/>
+              <circle cx="50" cy="22" r="2.5" fill="#D4AF37"/>
+            </svg>
+            <p class="flap-monogram-label">NISHANT &amp; SHWETA</p>
+          </div>
+        </div>
+
+        <!-- Golden Satin Ribbon -->
+        <div class="envelope-ribbon-bar" id="envelope-ribbon" aria-hidden="true"></div>
+
+        <!-- The 3D Wax Seal with 'N | S' -->
+        <div class="wax-seal-wrapper" id="wax-seal-wrapper">
+          <button type="button" class="wax-seal-btn" id="wax-seal-btn" aria-label="Break Wax Seal and Open Invitation">
+            <div class="wax-seal-halo" aria-hidden="true"></div>
+            <div class="wax-seal-body">
+              <span class="wax-monogram">N | S</span>
+            </div>
+          </button>
+          <div class="open-card-prompt" id="open-card-prompt">
+            ✦ Tap Wax Seal or Scroll to Open ✦
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ====================================================
+           PHASE 2: ULTRA HIGH-DEFINITION 12-PAGE FLIPBOOK
+           (100% Crisp Vector Typography, Sharp SVGs & 4K Photos)
+           ==================================================== -->
+      <div class="royal-book-folio" id="royal-book">
+        
+        <!-- PAGE 0: ROYAL ARCH COVER (Matching Panel 1 / Image 2) -->
+        <article class="book-page active-page" data-page-index="0" id="page-0">
+          <div class="hd-card-page arch-cover-page">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <div class="top-monogram-badge">
+              <div class="mini-circle-monogram">N | S</div>
+            </div>
+
+            <p class="card-intro-text" style="margin-top: 6px;">
+              TOGETHER WITH OUR FAMILIES<br>
+              WE JOYFULLY INVITE YOU TO<br>
+              CELEBRATE THE WEDDING OF
+            </p>
+
+            <div class="couple-title-block">
+              <h1 class="groom-name">NISHANT</h1>
+              <span class="script-and">and</span>
+              <h1 class="bride-name">SHWETA</h1>
+            </div>
+
+            <div class="couple-tagline">
+              <span>TWO SOULS. ONE PROMISE.</span>
+              <span class="couple-sub-script">a lifetime together.</span>
+            </div>
+
+            <div class="lotus-divider" aria-hidden="true">
+              <span class="lotus-line"></span>
+              <svg class="lotus-icon" viewBox="0 0 24 24"><path d="M12 2c1.5 3 4 5 7 6-2 3-5 5-7 10-2-5-5-7-7-10 3-1 5.5-3 7-6z"/></svg>
+              <span class="lotus-line"></span>
+            </div>
+
+            <!-- Palace Sketch -->
+            <div class="palace-sketch-wrapper">
+              <img src="assets/images/palace_vintage_sketch.jpg" alt="Vintage Lake Palace Sketch" class="card-vintage-palace-sketch" loading="eager">
+            </div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 1: A NEW CHAPTER BEGINS (Matching Panel 2) -->
+        <article class="book-page" data-page-index="1" id="page-1">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <div class="panel-header-block">
+              <span class="script-intro-heading">A new chapter</span>
+              <h2 class="panel-main-title">BEGINS</h2>
+            </div>
+
+            <p class="panel-body-prose">
+              With the blessings of our families, we are delighted to invite you to be a part of our special day. Your presence will make our celebration even more special.
+            </p>
+
+            <!-- Ultra High-Definition Couple Palace Walk Photo (1MB) -->
+            <div class="hero-photo-wrapper">
+              <img src="assets/images/couple_palace_walk.jpg" alt="Nishant &amp; Shweta Walking Hand-in-Hand at the Palace" loading="lazy">
+              <div class="photo-gold-border-decor" aria-hidden="true"></div>
+            </div>
+
+            <div class="panel-bottom-nav-badges">
+              <div class="nav-badge-pill">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/></svg>
+                <span>OUR STORY</span>
+              </div>
+              <div class="nav-badge-pill">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+                <span>EVENTS</span>
+              </div>
+              <div class="nav-badge-pill">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2c1.5 3 4 5 7 6-2 3-5 5-7 10-2-5-5-7-7-10 3-1 5.5-3 7-6z"/></svg>
+                <span>DETAILS</span>
+              </div>
+            </div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 2: SAVE THE DATE (Matching Panel 3) -->
+        <article class="book-page" data-page-index="2" id="page-2">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <div class="lotus-divider" style="margin-top: 5px;">
+              <svg class="lotus-icon" viewBox="0 0 24 24"><path d="M12 2c1.5 3 4 5 7 6-2 3-5 5-7 10-2-5-5-7-7-10 3-1 5.5-3 7-6z"/></svg>
+            </div>
+
+            <h2 class="panel-main-title" style="letter-spacing: 3px;">SAVE THE DATE</h2>
+
+            <div class="card-save-date-block" style="margin: 15px 0;">
+              <div class="std-label">SATURDAY</div>
+              <div class="date-number" style="font-size: 3.5rem; margin: 5px 0;">12</div>
+              <div class="std-label">DECEMBER 2026</div>
+            </div>
+
+            <div class="palace-sketch-wrapper" style="margin: 15px -20px 10px;">
+              <img src="assets/images/palace_vintage_sketch.jpg" alt="Vintage Lake Palace Sketch" class="card-vintage-palace-sketch" loading="lazy">
+            </div>
+
+            <div class="venue-location-snippet">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#1B3B2B" style="display:block; margin: 0 auto 4px;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <h3 class="cover-venue-name">BHANUSHALI WADI BANQUET HALL</h3>
+              <p class="cover-venue-address">
+                BASTESHWAR MAHARAJ MARG, NERUL EAST,<br>
+                SECTOR 10A, NERUL, NAVI MUMBAI 400706
+              </p>
+            </div>
+
+            <!-- Live Countdown & Action Buttons -->
+            <div class="countdown-mini-bar" style="margin: 14px auto 8px;" role="timer" aria-live="polite">
+              <span class="cd-item"><strong id="count-days">00</strong>d</span> :
+              <span class="cd-item"><strong id="count-hours">00</strong>h</span> :
+              <span class="cd-item"><strong id="count-minutes">00</strong>m</span> :
+              <span class="cd-item"><strong id="count-seconds">00</strong>s</span>
+            </div>
+
+            <div class="action-buttons-mini" style="justify-content: center; margin-bottom: 10px;">
+              <button type="button" class="btn-royal-gold-mini" id="btn-add-google-cal">+ Google Calendar</button>
+              <button type="button" class="btn-royal-outline-mini" id="btn-add-ical">+ iCal (.ics)</button>
+            </div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 3: THE VENUE (Matching Panel 4) -->
+        <article class="book-page" data-page-index="3" id="page-3">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <h2 class="panel-main-title">THE VENUE</h2>
+            <p class="panel-sub-script-title">A beautiful place to create beautiful memories</p>
+
+            <!-- Ultra High-Definition Mandap Image (1.16MB) -->
+            <div class="venue-visual-card" style="margin: 10px 0;">
+              <img src="assets/images/wedding_venue_mandap.jpg" alt="Bhanushali Wadi Banquet Hall Mandap" loading="lazy">
+            </div>
+
+            <div class="venue-location-snippet" style="margin-top: 10px;">
+              <h3 class="cover-venue-name" style="font-size: 1rem;">BHANUSHALI WADI BANQUET HALL</h3>
+              <p class="cover-venue-address">
+                BASTESHWAR MAHARAJ MARG, NERUL EAST,<br>
+                SECTOR 10A, NERUL, NAVI MUMBAI 400706
+              </p>
+            </div>
+
+            <div class="action-buttons-mini" style="justify-content: center; margin: 14px 0 10px;">
+              <a href="https://maps.google.com/?q=Bhanushali+Wadi+Banquet+Hall+Nerul+Navi+Mumbai" target="_blank" rel="noopener noreferrer" class="btn-royal-gold-mini" style="padding: 9px 20px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                GET DIRECTIONS
+              </a>
+              <button type="button" class="btn-royal-outline-mini" id="btn-copy-address">
+                Copy Address
+              </button>
+            </div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 4: OUR STORY (Matching Panel 5) -->
+        <article class="book-page" data-page-index="4" id="page-4">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <h2 class="panel-main-title">OUR STORY</h2>
+            <div class="panel-quote-script" style="font-size: 1.8rem; margin: -2px 0 8px;">Different paths, same destination.</div>
+
+            <p class="panel-body-prose" style="font-size: 0.95rem; margin-bottom: 12px;">
+              Two hearts, two journeys, one beautiful beginning. What started as a friendship grew into a bond for life, filled with love, trust and endless support. Now, we’re ready to begin our forever, with your blessings.
+            </p>
+
+            <!-- Ultra High-Definition Polaroid Moments (900KB) -->
+            <div class="story-polaroid-stage" style="margin: 10px auto;">
+              <img src="assets/images/couple_romantic_moments.jpg" alt="Polaroid Film Photos of Nishant &amp; Shweta" loading="lazy">
+              <div class="polaroid-handwritten-note">Better Together</div>
+            </div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 5: WEDDING EVENTS (Matching Panel 6) -->
+        <article class="book-page" data-page-index="5" id="page-5">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <h2 class="panel-main-title">WEDDING EVENTS</h2>
+            <p class="panel-sub-script-title" style="margin-bottom: 12px;">Join us for a celebration filled with love, traditions and joy.</p>
+
+            <div class="royal-timeline">
+              <div class="timeline-event-card">
+                <div class="timeline-node-pin"></div>
+                <span class="event-time-badge">12:00 PM</span>
+                <h4 class="event-title">Guest Arrival and Welcome</h4>
+                <p class="event-desc">Dhol beats, rose petal showers, and welcome drinks.</p>
+              </div>
+
+              <div class="timeline-event-card">
+                <div class="timeline-node-pin"></div>
+                <span class="event-time-badge">12:30 PM</span>
+                <h4 class="event-title">Varmala Ceremony</h4>
+                <p class="event-desc">Royal garland exchange under the grand floral mandap.</p>
+              </div>
+
+              <div class="timeline-event-card">
+                <div class="timeline-node-pin"></div>
+                <span class="event-time-badge">1:30 PM</span>
+                <h4 class="event-title">Lunch</h4>
+                <p class="event-desc">A delightful royal spread of authentic traditional flavors.</p>
+              </div>
+
+              <div class="timeline-event-card">
+                <div class="timeline-node-pin"></div>
+                <span class="event-time-badge">4:00 PM</span>
+                <h4 class="event-title">Other Rituals &amp; Family Moments</h4>
+                <p class="event-desc">Sacred pheras, blessings, and family portraits.</p>
+              </div>
+
+              <div class="timeline-event-card">
+                <div class="timeline-node-pin"></div>
+                <span class="event-time-badge">7:00 PM</span>
+                <h4 class="event-title">Dinner &amp; Celebration</h4>
+                <p class="event-desc">An evening of music, dance, and unforgettable memories.</p>
+              </div>
+            </div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 6: DRESS CODE (Matching Panel 7) -->
+        <article class="book-page" data-page-index="6" id="page-6">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <h2 class="panel-main-title">DRESS CODE</h2>
+            <p class="panel-sub-script-title">We would love to see you in your elegant ethnic best!</p>
+
+            <!-- Ultra High-Definition Ethnic Attire (900KB) -->
+            <div class="dress-code-visual" style="margin: 10px 0;">
+              <img src="assets/images/ethnic_dress_code.jpg" alt="Traditional Indian Outfits: Kurta, Sherwani, Saree, Lehenga" loading="lazy">
+            </div>
+
+            <div class="dress-columns-grid" style="margin: 10px 0;">
+              <div class="dress-col-box">
+                <span class="dress-col-label">FOR MEN</span>
+                <p class="dress-col-styles">Kurta, Sherwani or Indo-Western</p>
+              </div>
+              <div class="dress-col-box">
+                <span class="dress-col-label">FOR WOMEN</span>
+                <p class="dress-col-styles">Saree, Lehenga or Ethnic Wear</p>
+              </div>
+            </div>
+
+            <p class="panel-sub-title" style="text-align: center; margin-top: 10px;">Recommended Festive Palette</p>
+            <div class="palette-swatches-row">
+              <button type="button" class="palette-chip chip-emerald active" data-color="emerald" title="Royal Emerald Green"></button>
+              <button type="button" class="palette-chip chip-champagne" data-color="champagne" title="Champagne Ivory"></button>
+              <button type="button" class="palette-chip chip-gold" data-color="gold" title="Golden Sand"></button>
+              <button type="button" class="palette-chip chip-rose" data-color="rose" title="Pastel Rose Blush"></button>
+              <button type="button" class="palette-chip chip-rust" data-color="rust" title="Terracotta Rust"></button>
+            </div>
+            <div id="dress-code-dynamic-hint">Royal Emerald Green: Elegant, majestic, and auspicious.</div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 7: GALLERY (Matching Panel 8) -->
+        <article class="book-page" data-page-index="7" id="page-7">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <h2 class="panel-main-title">GALLERY</h2>
+            <p class="panel-sub-script-title">Some moments from our journey</p>
+
+            <div class="gallery-grid" style="margin: 12px 0;">
+              <div class="gallery-item" data-full="assets/images/couple_palace_walk.jpg" data-caption="Walking towards our new beginning at the palace">
+                <img src="assets/images/couple_palace_walk.jpg" alt="Couple Walking towards Palace" loading="lazy">
+              </div>
+              <div class="gallery-item" data-full="assets/images/wedding_venue_mandap.jpg" data-caption="The grand illuminated floral mandap">
+                <img src="assets/images/wedding_venue_mandap.jpg" alt="Wedding Mandap Pavilion" loading="lazy">
+              </div>
+              <div class="gallery-item" data-full="assets/images/couple_romantic_moments.jpg" data-caption="Candid laughter and golden hour pre-wedding moments">
+                <img src="assets/images/couple_romantic_moments.jpg" alt="Polaroid Pre-wedding Moments" loading="lazy">
+              </div>
+              <div class="gallery-item" data-full="assets/images/palace_night_diyas.jpg" data-caption="Twilight reflections and glowing celebration diyas">
+                <img src="assets/images/palace_night_diyas.jpg" alt="Palace Courtyard Night Reflections" loading="lazy">
+              </div>
+            </div>
+
+            <p class="panel-body-prose" style="font-size: 0.9rem; margin-top: 8px;">
+              <em>Many more beautiful moments to create together...</em>
+            </p>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 8: GIFT NOTE (Matching Panel 9) -->
+        <article class="book-page" data-page-index="8" id="page-8">
+          <div class="hd-card-page panel-royal-maroon scrollable-content">
+            <div class="shagun-gift-icon-box">
+              <svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+            </div>
+
+            <h2 class="panel-main-title">YOUR PRESENCE</h2>
+            <div class="panel-quote-script">IS OUR GREATEST GIFT</div>
+
+            <p class="panel-body-prose" style="margin: 20px auto; max-width: 85%;">
+              If you wish to bless us with a gift, your warm wishes and presence in our celebration are the most valuable to us.
+            </p>
+
+            <div class="lotus-divider" style="opacity: 0.6; margin-top: 30px;">
+              <span class="lotus-line"></span>
+              <svg class="lotus-icon" viewBox="0 0 24 24" fill="#F9E7B9"><path d="M12 2c1.5 3 4 5 7 6-2 3-5 5-7 10-2-5-5-7-7-10 3-1 5.5-3 7-6z"/></svg>
+              <span class="lotus-line"></span>
+            </div>
+
+            <div class="page-corner-hint" style="color: var(--color-gold-light);">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 9: RSVP (Matching Panel 10) -->
+        <article class="book-page" data-page-index="9" id="page-9">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <h2 class="panel-main-title">KINDLY CONFIRM</h2>
+            <div class="panel-quote-script">YOUR PRESENCE</div>
+
+            <p class="panel-body-prose" style="margin-bottom: 20px;">
+              We would be delighted to have you with us!
+            </p>
+
+            <!-- Embedded Interactive RSVP Form -->
+            <div id="rsvp-card-container">
+              <form class="rsvp-card-box" id="rsvp-form">
+                <div class="form-group">
+                  <label for="rsvp-name" class="form-label">Full Name of Guest *</label>
+                  <input type="text" id="rsvp-name" class="form-input" placeholder="e.g. Ramesh Patel &amp; Family" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="rsvp-phone" class="form-label">WhatsApp Number</label>
+                  <input type="tel" id="rsvp-phone" class="form-input" placeholder="+91 98765 43210">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Total Number of Attending Guests</label>
+                  <div class="counter-stepper">
+                    <button type="button" class="stepper-btn" id="guest-minus" aria-label="Decrease guest count">−</button>
+                    <span class="stepper-count" id="rsvp-guest-count">1</span>
+                    <button type="button" class="stepper-btn" id="guest-plus" aria-label="Increase guest count">+</button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Ceremonies You Will Grace</label>
+                  <div class="events-check-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="rsvp-event" value="Varmala & Lunch (12 PM)" checked>
+                      <span>Varmala &amp; Lunch Feast (12 PM)</span>
+                    </label>
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="rsvp-event" value="Dinner & Celebration (7 PM)" checked>
+                      <span>Dinner &amp; Celebration (7 PM)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-royal-gold" style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;">
+                  YES, I'LL BE THERE! ✦
+                </button>
+              </form>
+            </div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 10: LEAVE YOUR BLESSINGS (Matching Panel 11) -->
+        <article class="book-page" data-page-index="10" id="page-10">
+          <div class="hd-card-page scrollable-content">
+            <div class="card-gilded-frame" aria-hidden="true"></div>
+
+            <h2 class="panel-main-title">LEAVE YOUR BLESSINGS</h2>
+            <p class="panel-sub-script-title" style="margin-bottom: 12px;">Your wishes will always be special to us and we will cherish them forever.</p>
+
+            <form class="blessings-input-card" id="blessing-form">
+              <div class="form-group">
+                <input type="text" id="blessing-name" class="form-input" placeholder="Your Name &amp; Relation (e.g. Priya - Cousin)" required>
+              </div>
+              <div class="form-group">
+                <textarea id="blessing-text" class="form-input" rows="2" placeholder="Write your message here..." required></textarea>
+              </div>
+
+              <div class="form-group" style="text-align: center; margin-bottom: 10px;">
+                <div class="flower-picker-row">
+                  <label class="flower-radio-label">
+                    <input type="radio" name="blessing-flower" value="lotus" checked>
+                    <span>Lotus</span>
+                  </label>
+                  <label class="flower-radio-label">
+                    <input type="radio" name="blessing-flower" value="rose">
+                    <span>Rose</span>
+                  </label>
+                  <label class="flower-radio-label">
+                    <input type="radio" name="blessing-flower" value="marigold">
+                    <span>Marigold</span>
+                  </label>
+                  <label class="flower-radio-label">
+                    <input type="radio" name="blessing-flower" value="jasmine">
+                    <span>Jasmine</span>
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-royal-gold" style="width: 100%; justify-content: center; padding: 10px;">
+                SEND WISHES
+              </button>
+            </form>
+
+            <div class="blessings-wall-container" id="blessings-wall-container"></div>
+
+            <div class="page-corner-hint">Scroll or Flip ➔</div>
+          </div>
+        </article>
+
+        <!-- PAGE 11: THANK YOU (Matching Panel 12) -->
+        <article class="book-page" data-page-index="11" id="page-11">
+          <div class="hd-card-page lake-finale-panel scrollable-content" id="lake-finale">
+            <h2 class="panel-main-title" style="color: #FFFDF8;">THANK YOU</h2>
+            <div class="panel-quote-script" style="color: var(--color-gold-light); font-size: 1.8rem; margin: 4px 0 12px;">
+              We can’t wait to celebrate our special day with you!
+            </div>
+
+            <div class="lake-photo-frame" style="margin: 10px 0;">
+              <img src="assets/images/palace_night_diyas.jpg" alt="Illuminated Palace with Floating Diyas on Lake" loading="lazy">
+            </div>
+
+            <div class="diya-floating-trigger" style="margin: 12px 0;">
+              <button type="button" class="btn-royal-gold" id="btn-float-diya">
+                Light &amp; Float a Diya on the Lake 🪔
+              </button>
+            </div>
+
+            <div class="couple-title-block" style="margin-top: 10px;">
+              <h3 class="groom-name" style="font-size: 1.6rem; color: var(--color-gold-light);">Nishant &amp; Shweta</h3>
+              <span class="couple-sub-script" style="color: var(--color-gold-light); font-size: 1.2rem;">12 • 12 • 2026</span>
+            </div>
+
+            <div class="card-share-footer" style="margin-top: 12px; padding-top: 10px;">
+              <div class="share-btns-row">
+                <button type="button" class="btn-royal-gold-mini" id="btn-share-whatsapp">
+                  WhatsApp Share
+                </button>
+                <button type="button" class="btn-royal-outline-mini" id="btn-copy-invite-link" style="color: var(--color-gold-light); border-color: var(--color-gold-primary);">
+                  Copy Link
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div> <!-- /royal-book -->
+
+      <!-- 3D Book Page Flip Navigation Controls -->
+      <button type="button" class="book-nav-arrow arrow-prev" id="book-prev-btn" aria-label="Previous Page" title="Flip to Previous Page">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button type="button" class="book-nav-arrow arrow-next" id="book-next-btn" aria-label="Next Page" title="Flip to Next Page">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <!-- Bottom Card Elevation Shadow (Shifts with Cursor Parallax) -->
+      <div class="card-cast-shadow" id="card-shadow" aria-hidden="true"></div>
+
+    </div> <!-- /tilt-container -->
+
+    <!-- Page Flip Progress Pagination Indicator -->
+    <div class="page-pagination-dots" id="page-dots" role="tablist" aria-label="Page Indicators"></div>
+
+  </main>
+
+  <!-- Photo Lightbox Modal -->
+  <div class="gallery-lightbox-modal" id="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Photo Lightbox">
+    <div class="lightbox-content-box">
+      <button type="button" class="lightbox-close-btn" id="lightbox-close" aria-label="Close Lightbox">&times;</button>
+      <img src="" alt="" id="lightbox-image">
+      <p class="lightbox-caption-text" id="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/petals.js"></script>
+  <script src="js/rsvp-blessings.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

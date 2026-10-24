@@ -1,0 +1,13 @@
+# Temporary development scripts
+analyze_grid.ps1
+copy_images.ps1
+crop_panels.ps1
+find_cols.ps1
+find_coords.ps1
+find_rows.ps1
+get_dims.ps1
+scan_borders.ps1
+scratch*/
+*.log
+.DS_Store
+Thumbs.db
