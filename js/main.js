@@ -1,408 +1,290 @@
 /**
  * Nishant & Shweta Royal Wedding Invitation
- * 3D Card Opening, Scroll Page-Flipping Engine & Cursor Reactivity
+ * Full-Screen Scrollytelling Engine, Bespoke Scene Transitions,
+ * Gold Dust Dissolution Particle Canvas & Interactive Features
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Petal Shower
-  const petals = new window.PetalShower('petals-canvas');
 
-  // DOM Elements
-  const tiltBox = document.getElementById('tilt-box');
-  const cardShadow = document.getElementById('card-shadow');
-  const royalEnvelope = document.getElementById('royal-envelope');
-  const envelopeFlap = document.getElementById('envelope-flap');
-  const waxSealBtn = document.getElementById('wax-seal-btn');
-  const openPrompt = document.getElementById('open-card-prompt');
-  const royalBook = document.getElementById('royal-book');
-  const pages = document.querySelectorAll('.book-page');
-  const prevBtn = document.getElementById('book-prev-btn');
-  const nextBtn = document.getElementById('book-next-btn');
-  const navPills = document.querySelectorAll('.nav-pill');
-  const pageDotsContainer = document.getElementById('page-dots');
+  // --- 1. INITIALIZE CANVAS PARTICLES & ENGINES ---
+  const petals = new window.PetalShower('petals-canvas');
+  const goldDust = new GoldDustEngine('dust-canvas');
+
+  // --- 2. DOM ELEMENTS ---
+  const scrollDriver = document.getElementById('scroll-driver');
+  const scrollProgressLine = document.getElementById('scroll-progress-line');
+  const scenePanels = Array.from(document.querySelectorAll('.scene-panel'));
+  const railDots = Array.from(document.querySelectorAll('.rail-dot'));
+  const scrollPrompt = document.getElementById('scroll-prompt');
+  const foilGlint = document.getElementById('foil-glint');
   const musicToggleBtn = document.getElementById('btn-toggle-music');
   const petalsToggleBtn = document.getElementById('btn-toggle-petals');
+  const toastBox = document.getElementById('royal-toast');
+  const toastMsg = document.getElementById('toast-message');
 
-  let isCardOpened = false;
-  let currentPageIndex = 0;
-  const totalPages = pages.length;
-  let isFlipping = false;
+  const totalScenes = scenePanels.length; // 8 scenes: 0 to 7
+  let currentSceneIndex = 0;
+  let isNavigating = false;
+  let hasUserScrolled = false;
 
-  // --- 1. SETUP PAGINATION DOTS ---
-  if (pageDotsContainer) {
-    pageDotsContainer.innerHTML = '';
-    for (let i = 0; i < totalPages; i++) {
-      const dot = document.createElement('button');
-      dot.className = `page-dot ${i === 0 ? 'active' : ''}`;
-      dot.setAttribute('aria-label', `Go to page ${i + 1}`);
-      dot.addEventListener('click', () => {
-        if (!isCardOpened) openCardEnvelope();
-        flipToPage(i);
-      });
-      pageDotsContainer.appendChild(dot);
+  // --- 3. SCROLL PROGRESS & SCENE STATE MACHINE ---
+  function updateScrollState() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+    const rawProgress = Math.min(1, Math.max(0, scrollY / maxScroll));
+
+    // Update Top Gold Progress Line
+    if (scrollProgressLine) {
+      scrollProgressLine.style.width = `${(rawProgress * 100).toFixed(1)}%`;
+    }
+
+    // Hide initial scroll prompt after first gesture
+    if (!hasUserScrolled && scrollY > 40) {
+      hasUserScrolled = true;
+      if (scrollPrompt) scrollPrompt.classList.add('fade-out');
+    } else if (scrollY <= 20 && hasUserScrolled) {
+      hasUserScrolled = false;
+      if (scrollPrompt) scrollPrompt.classList.remove('fade-out');
+    }
+
+    // Map progress to active scene index (0 to 7)
+    // Using smooth threshold zones
+    const stepSize = 1 / totalScenes;
+    let targetIndex = Math.floor(rawProgress / stepSize);
+    if (targetIndex >= totalScenes) targetIndex = totalScenes - 1;
+
+    if (targetIndex !== currentSceneIndex) {
+      transitionToScene(targetIndex, targetIndex > currentSceneIndex ? 'down' : 'up');
     }
   }
 
-  // --- 2. CARD OPENING & EXTRACTION MECHANIC ---
-  function openCardEnvelope() {
-    if (isCardOpened) return;
-    isCardOpened = true;
-    document.body.classList.add('card-is-open');
-    if (typeof requestOrientationPermission === 'function') {
-      requestOrientationPermission();
-    }
+  // --- 4. BESPOKE SCENE TRANSITIONS ---
+  function transitionToScene(newIndex, direction) {
+    if (newIndex < 0 || newIndex >= totalScenes) return;
 
-    // Play auspicious opening sounds
-    if (window.weddingAudio) {
-      window.weddingAudio.playWaxSealBreak();
-      setTimeout(() => window.weddingAudio.playPaperRustle(), 350);
-      window.weddingAudio.startMusic();
-      updateMusicButtonUI(true);
-    }
+    const oldIndex = currentSceneIndex;
+    const oldScene = scenePanels[oldIndex];
+    const newScene = scenePanels[newIndex];
+    currentSceneIndex = newIndex;
 
-    // 1. Break wax seal & flip envelope flap
-    if (waxSealBtn) waxSealBtn.classList.add('broken');
-    if (envelopeFlap) envelopeFlap.classList.add('opened');
-    if (openPrompt) openPrompt.style.display = 'none';
-
-    // 2. Slide inner card out of the envelope
-    setTimeout(() => {
-      if (royalEnvelope) royalEnvelope.classList.add('opened');
-      if (royalBook) royalBook.classList.add('unfolded');
-      updateNavControls();
-    }, 600);
-  }
-
-  if (waxSealBtn) {
-    waxSealBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openCardEnvelope();
+    // Update Nav Rail Dots
+    railDots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === newIndex);
     });
-  }
 
-  // --- 3. 3D PAGE FLIPPING ENGINE ---
-  function flipToPage(targetIndex) {
-    if (targetIndex < 0 || targetIndex >= totalPages || targetIndex === currentPageIndex || isFlipping) return;
-    isFlipping = true;
-
-    if (window.weddingAudio) {
+    // Play subtle paper rustle / ceremonial sound effect
+    if (window.weddingAudio && typeof window.weddingAudio.playPaperRustle === 'function') {
       window.weddingAudio.playPaperRustle();
     }
 
-    const direction = targetIndex > currentPageIndex ? 'forward' : 'backward';
-
-    pages.forEach((page, idx) => {
-      page.classList.remove('active-page', 'flipped-past', 'upcoming');
-      if (idx < targetIndex) {
-        page.classList.add('flipped-past');
-      } else if (idx === targetIndex) {
-        page.classList.add('active-page');
-      } else {
-        page.classList.add('upcoming');
-      }
+    // Clear previous transition animation classes
+    scenePanels.forEach(panel => {
+      panel.classList.remove(
+        'transition-out-dust', 'transition-in-dust',
+        'transition-out-zoom', 'transition-in-zoom',
+        'transition-out-stamp', 'transition-in-stamp',
+        'transition-out-arch', 'transition-in-arch',
+        'transition-out-drift', 'transition-in-drift',
+        'transition-out-stagger', 'transition-in-stagger',
+        'transition-out-bloom', 'transition-in-bloom',
+        'transition-in-diya'
+      );
     });
 
-    currentPageIndex = targetIndex;
-    updateNavControls();
+    // SCENE 0 SPECIFIC: GOLD DUST DISSOLUTION ("dusts away and comes back")
+    if (oldIndex === 0 && newIndex > 0) {
+      oldScene.classList.add('transition-out-dust');
+      goldDust.burstScatter('upwards', 160);
+    } else if (newIndex === 0 && oldIndex > 0) {
+      newScene.classList.add('transition-in-dust');
+      goldDust.burstCoalesce(180);
+    }
+
+    // SCENE 1 SPECIFIC: 3D DEPTH ZOOM & LENS BLUR
+    if (newIndex === 1) {
+      newScene.classList.add('transition-in-zoom');
+    } else if (oldIndex === 1) {
+      oldScene.classList.add('transition-out-zoom');
+    }
+
+    // SCENE 2 SPECIFIC: ROYAL SEAL STAMP & SHOCKWAVE PULSE
+    if (newIndex === 2) {
+      newScene.classList.add('transition-in-stamp');
+      goldDust.burstShockwave();
+    } else if (oldIndex === 2) {
+      oldScene.classList.add('transition-out-stamp');
+    }
+
+    // SCENE 3 SPECIFIC: ARCHITECTURAL GATES REVEAL
+    if (newIndex === 3) {
+      newScene.classList.add('transition-in-arch');
+    } else if (oldIndex === 3) {
+      oldScene.classList.add('transition-out-arch');
+    }
+
+    // SCENE 4 SPECIFIC: VINTAGE POLAROID TILT DRIFT
+    if (newIndex === 4) {
+      newScene.classList.add('transition-in-drift');
+    } else if (oldIndex === 4) {
+      oldScene.classList.add('transition-out-drift');
+    }
+
+    // SCENE 5 SPECIFIC: TIMELINE CASCADE STAGGER
+    if (newIndex === 5) {
+      newScene.classList.add('transition-in-stagger');
+    } else if (oldIndex === 5) {
+      oldScene.classList.add('transition-out-stagger');
+    }
+
+    // SCENE 6 SPECIFIC: LOTUS RADIAL BLOOM
+    if (newIndex === 6) {
+      newScene.classList.add('transition-in-bloom');
+    } else if (oldIndex === 6) {
+      oldScene.classList.add('transition-out-bloom');
+    }
+
+    // SCENE 7 SPECIFIC: TWILIGHT LAKE DIYA GLOW
+    if (newIndex === 7) {
+      newScene.classList.add('transition-in-diya');
+      goldDust.burstGentle(80);
+    }
+
+    // Activate the new panel and deactivate others
+    scenePanels.forEach((panel, idx) => {
+      panel.classList.toggle('active', idx === newIndex);
+    });
+  }
+
+  // --- 5. SMOOTH NAVIGATION CONTROLS ---
+  function scrollToSceneIndex(index) {
+    if (index < 0 || index >= totalScenes) return;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const targetScrollY = (index / (totalScenes - 1)) * maxScroll;
+
+    isNavigating = true;
+    window.scrollTo({
+      top: targetScrollY,
+      behavior: 'smooth'
+    });
 
     setTimeout(() => {
-      isFlipping = false;
-    }, 850);
+      isNavigating = false;
+    }, 700);
   }
 
-  function nextPage() {
-    if (!isCardOpened) {
-      openCardEnvelope();
-      return;
-    }
-    if (currentPageIndex < totalPages - 1) {
-      flipToPage(currentPageIndex + 1);
-    }
-  }
-
-  function prevPage() {
-    if (!isCardOpened) return;
-    if (currentPageIndex > 0) {
-      flipToPage(currentPageIndex - 1);
-    }
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      nextPage();
+  // Rail dot clicks
+  railDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const targetIdx = parseInt(dot.getAttribute('data-index'), 10);
+      scrollToSceneIndex(targetIdx);
     });
-  }
+  });
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      prevPage();
-    });
-  }
-
-  // Update Navigation UI (Pills, Dots, Arrows)
-  function updateNavControls() {
-    // Nav Pills
-    navPills.forEach(pill => {
-      const pIdx = parseInt(pill.getAttribute('data-page'), 10);
-      pill.classList.toggle('active', pIdx === currentPageIndex);
-    });
-
-    // Pagination Dots
-    const dots = document.querySelectorAll('.page-dot');
-    dots.forEach((dot, idx) => {
-      dot.classList.toggle('active', idx === currentPageIndex);
-    });
-
-    // Arrow states
-    if (prevBtn) prevBtn.disabled = !isCardOpened || currentPageIndex === 0;
-    if (nextBtn) nextBtn.disabled = !isCardOpened || currentPageIndex === totalPages - 1;
-  }
-
-  // Nav Pill Clicks
-  navPills.forEach(pill => {
+  // Chapter jump pills (e.g. on Scene 1)
+  document.querySelectorAll('[data-jump]').forEach(pill => {
     pill.addEventListener('click', () => {
-      const pIdx = parseInt(pill.getAttribute('data-page'), 10);
-      if (!isCardOpened) openCardEnvelope();
-      flipToPage(pIdx);
+      const jumpIdx = parseInt(pill.getAttribute('data-jump'), 10);
+      scrollToSceneIndex(jumpIdx);
     });
   });
 
-  // --- 4. SCROLL & WHEEL PAGE-FLIPPING CONTROLLER ---
-  let scrollTimeout = null;
-  let accumulatedDelta = 0;
+  // "Explore Invitation" button on Scene 0
+  const beginScrollBtn = document.getElementById('btn-begin-scroll');
+  if (beginScrollBtn) {
+    beginScrollBtn.addEventListener('click', () => {
+      scrollToSceneIndex(1);
+    });
+  }
 
-  window.addEventListener('wheel', (e) => {
-    if (!isCardOpened) {
-      // Any wheel scroll opens the card!
-      openCardEnvelope();
-      return;
-    }
-
-    // Check if the current active page has scrollable content that isn't at edge
-    const activePage = pages[currentPageIndex];
-    const scrollableEl = activePage ? activePage.querySelector('.scrollable-content') : null;
-
-    if (scrollableEl) {
-      const atTop = scrollableEl.scrollTop <= 5;
-      const atBottom = scrollableEl.scrollTop + scrollableEl.clientHeight >= scrollableEl.scrollHeight - 5;
-
-      if (e.deltaY > 0 && !atBottom) {
-        // Scrolling down within page content
-        return;
-      }
-      if (e.deltaY < 0 && !atTop) {
-        // Scrolling up within page content
-        return;
-      }
-    }
-
-    // Otherwise scroll turns the pages!
-    e.preventDefault();
-    accumulatedDelta += e.deltaY;
-
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      if (accumulatedDelta > 45) {
-        nextPage();
-      } else if (accumulatedDelta < -45) {
-        prevPage();
-      }
-      accumulatedDelta = 0;
-    }, 60);
-  }, { passive: false });
-
-  // Touch Swipe on Mobile (Natural book flip & smart content scroll)
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchTarget = null;
-
-  window.addEventListener('touchstart', (e) => {
-    if (!e.changedTouches || e.changedTouches.length === 0) return;
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-    touchTarget = e.target;
-  }, { passive: true });
-
-  window.addEventListener('touchend', (e) => {
-    if (!e.changedTouches || e.changedTouches.length === 0) return;
-    const diffX = e.changedTouches[0].screenX - touchStartX;
-    const diffY = e.changedTouches[0].screenY - touchStartY;
-    const absX = Math.abs(diffX);
-    const absY = Math.abs(diffY);
-
-    // If envelope is not open, any swipe or tap on envelope opens it
-    if (!isCardOpened) {
-      if (absX > 25 || absY > 25 || (touchTarget && (touchTarget.closest('.wax-seal-btn') || touchTarget.closest('.royal-envelope-sleeve')))) {
-        openCardEnvelope();
-      }
-      return;
-    }
-
-    // Don't flip page if interacting with form inputs, buttons, or chips
-    if (touchTarget && touchTarget.closest('input, textarea, button, select, label, .palette-chip')) {
-      return;
-    }
-
-    // Horizontal Swipe (Natural Book Page Flip: Left = Next, Right = Prev)
-    if (absX > absY && absX > 35) {
-      if (diffX < -35) {
-        nextPage();
-      } else if (diffX > 35) {
-        prevPage();
-      }
-      return;
-    }
-
-    // Vertical Swipe (Scroll boundaries trigger page flip)
-    if (absY > 60) {
-      const activePage = pages[currentPageIndex];
-      const scrollableEl = activePage ? activePage.querySelector('.scrollable-content') : null;
-
-      if (scrollableEl) {
-        const atTop = scrollableEl.scrollTop <= 5;
-        const atBottom = scrollableEl.scrollTop + scrollableEl.clientHeight >= scrollableEl.scrollHeight - 5;
-
-        if (diffY < -60 && atBottom) {
-          nextPage();
-        } else if (diffY > 60 && atTop) {
-          prevPage();
-        }
-      } else {
-        if (diffY < -60) {
-          nextPage();
-        } else if (diffY > 60) {
-          prevPage();
-        }
-      }
-    }
-  }, { passive: true });
-
-  // Keyboard navigation
+  // Keyboard navigation (Arrow keys, PageUp/Down)
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
       e.preventDefault();
-      nextPage();
-    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      if (currentSceneIndex < totalScenes - 1) {
+        scrollToSceneIndex(currentSceneIndex + 1);
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
       e.preventDefault();
-      prevPage();
+      if (currentSceneIndex > 0) {
+        scrollToSceneIndex(currentSceneIndex - 1);
+      }
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      scrollToSceneIndex(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      scrollToSceneIndex(totalScenes - 1);
     }
   });
 
-  // --- 5. CURSOR & GYROSCOPE REACTIVITY (3D Tilt & Specular Light Parallax) ---
-  let mouseTargetX = 0;
-  let mouseTargetY = 0;
-  let currentTiltX = 0;
-  let currentTiltY = 0;
-
-  // Mobile Gyroscope Parallax for vertical screens
-  function handleDeviceOrientation(e) {
-    if (e.gamma === null || e.beta === null) return;
-    const clampGamma = Math.max(-25, Math.min(25, e.gamma));
-    const clampBeta = Math.max(15, Math.min(65, e.beta)) - 40;
-
-    mouseTargetX = (clampGamma / 25) * 8;
-    mouseTargetY = -(clampBeta / 25) * 6;
-
-    const glintX = Math.round(50 + (clampGamma / 25) * 35);
-    const glintY = Math.round(40 + (clampBeta / 25) * 35);
-    if (tiltBox) {
-      tiltBox.style.setProperty('--glint-x', `${glintX}%`);
-      tiltBox.style.setProperty('--glint-y', `${glintY}%`);
+  // Native scroll listener with RAF throttle
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateScrollState();
+        ticking = false;
+      });
+      ticking = true;
     }
-  }
+  }, { passive: true });
 
-  function requestOrientationPermission() {
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission()
-        .then(permissionState => {
-          if (permissionState === 'granted') {
-            window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
-          }
-        })
-        .catch(() => {});
-    } else if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
-    }
-  }
+  // Initial scroll calculation
+  updateScrollState();
 
-  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== 'function') {
-    window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
-  }
-
+  // --- 6. GOLD FOIL SPECULAR GLINT & GYROSCOPE ---
   window.addEventListener('mousemove', (e) => {
-    const normX = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
-    const normY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
-
-    mouseTargetX = normX * 12;  // max 12deg tilt
-    mouseTargetY = -normY * 10; // max 10deg tilt
-
-    // Specular light position following cursor
     const glintX = Math.round((e.clientX / window.innerWidth) * 100);
     const glintY = Math.round((e.clientY / window.innerHeight) * 100);
-    if (tiltBox) {
-      tiltBox.style.setProperty('--glint-x', `${glintX}%`);
-      tiltBox.style.setProperty('--glint-y', `${glintY}%`);
-    }
-
-    // Sparkle trail
-    if (Math.random() > 0.6) {
-      createSparkle(e.clientX, e.clientY);
+    if (foilGlint) {
+      foilGlint.style.setProperty('--glint-x', `${glintX}%`);
+      foilGlint.style.setProperty('--glint-y', `${glintY}%`);
     }
   }, { passive: true });
 
-  // Smooth lerp loop for card tilt
-  function renderTilt() {
-    currentTiltX += (mouseTargetX - currentTiltX) * 0.08;
-    currentTiltY += (mouseTargetY - currentTiltY) * 0.08;
-
-    if (tiltBox) {
-      tiltBox.style.transform = `rotateX(${currentTiltY.toFixed(2)}deg) rotateY(${currentTiltX.toFixed(2)}deg)`;
-    }
-
-    if (cardShadow) {
-      const shadowOffsetX = -currentTiltX * 2.2;
-      const shadowOffsetY = currentTiltY * 1.5;
-      cardShadow.style.transform = `translate(${shadowOffsetX}px, ${shadowOffsetY}px) scale(${1 + Math.abs(currentTiltX) * 0.01})`;
-    }
-
-    requestAnimationFrame(renderTilt);
-  }
-  requestAnimationFrame(renderTilt);
-
-  function createSparkle(x, y) {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'cursor-sparkle';
-    sparkle.style.left = `${x + (Math.random() - 0.5) * 18}px`;
-    sparkle.style.top = `${y + (Math.random() - 0.5) * 18}px`;
-    sparkle.style.transform = `scale(${0.4 + Math.random() * 0.8})`;
-    document.body.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 700);
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', (e) => {
+      if (e.gamma === null || e.beta === null) return;
+      const clampGamma = Math.max(-30, Math.min(30, e.gamma));
+      const clampBeta = Math.max(10, Math.min(60, e.beta)) - 35;
+      const glintX = Math.round(50 + (clampGamma / 30) * 40);
+      const glintY = Math.round(35 + (clampBeta / 25) * 40);
+      if (foilGlint) {
+        foilGlint.style.setProperty('--glint-x', `${glintX}%`);
+        foilGlint.style.setProperty('--glint-y', `${glintY}%`);
+      }
+    }, { passive: true });
   }
 
-  // --- 6. AUDIO & PETALS CONTROLS ---
+  // --- 7. AUDIO & PETALS CONTROLS ---
+  function updateMusicButtonUI(isPlaying) {
+    if (!musicToggleBtn) return;
+    musicToggleBtn.classList.toggle('playing', isPlaying);
+    const label = musicToggleBtn.querySelector('.audio-label');
+    if (label) label.textContent = isPlaying ? 'Music: On' : 'Music: Off';
+  }
+
   if (musicToggleBtn) {
     musicToggleBtn.addEventListener('click', () => {
       if (window.weddingAudio) {
         const isPlaying = window.weddingAudio.toggleMusic();
         updateMusicButtonUI(isPlaying);
+        showToast(isPlaying ? 'Shehnai & Tanpura Melodies Playing 🎶' : 'Music Paused');
       }
     });
   }
 
-  function updateMusicButtonUI(isPlaying) {
-    if (!musicToggleBtn) return;
-    if (isPlaying) {
-      musicToggleBtn.classList.add('playing');
-      const label = musicToggleBtn.querySelector('.audio-label');
-      if (label) label.textContent = 'Music: On';
-    } else {
-      musicToggleBtn.classList.remove('playing');
-      const label = musicToggleBtn.querySelector('.audio-label');
-      if (label) label.textContent = 'Music: Off';
+  // User interaction audio unlock
+  const unlockAudioOnGesture = () => {
+    if (window.weddingAudio && !window.weddingAudio.isPlaying) {
+      window.weddingAudio.startMusic();
+      updateMusicButtonUI(true);
     }
-  }
+    window.removeEventListener('click', unlockAudioOnGesture);
+    window.removeEventListener('touchstart', unlockAudioOnGesture);
+  };
+  window.addEventListener('click', unlockAudioOnGesture, { once: true });
+  window.addEventListener('touchstart', unlockAudioOnGesture, { once: true });
 
   if (petalsToggleBtn) {
     petalsToggleBtn.addEventListener('click', () => {
@@ -410,10 +292,11 @@ document.addEventListener('DOMContentLoaded', () => {
       petalsToggleBtn.classList.toggle('active', active);
       const label = petalsToggleBtn.querySelector('.petal-label');
       if (label) label.textContent = active ? 'Petals: On' : 'Petals: Off';
+      showToast(active ? 'Rose Petals Shower Active 🌸' : 'Petals Paused');
     });
   }
 
-  // --- 7. LIVE WEDDING COUNTDOWN ---
+  // --- 8. REAL-TIME LIVE WEDDING COUNTDOWN ---
   const weddingDate = new Date('2026-12-12T12:00:00+05:30').getTime();
 
   function updateCountdown() {
@@ -447,35 +330,39 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(updateCountdown, 1000);
   updateCountdown();
 
-  // --- 8. CALENDAR EXPORT (Google & Apple iCal) ---
+  // --- 9. CALENDAR EXPORT (Google & Apple iCal) ---
   const btnGoogleCal = document.getElementById('btn-add-google-cal');
-  const btnIcal = document.getElementById('btn-add-ical');
-
   if (btnGoogleCal) {
     btnGoogleCal.addEventListener('click', () => {
-      const gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-        '&text=' + encodeURIComponent('Wedding of Nishant & Shweta') +
-        '&dates=20261212T063000Z/20261212T173000Z' +
-        '&details=' + encodeURIComponent('Together with our families, we joyfully invite you to celebrate the wedding of Nishant & Shweta at Bhanushali Wadi Banquet Hall, Nerul Navi Mumbai.') +
-        '&location=' + encodeURIComponent('Bhanushali Wadi Banquet Hall, Basteshwar Maharaj Marg, Nerul East, Sector 10A, Nerul, Navi Mumbai, Maharashtra 400706');
-      window.open(gcalUrl, '_blank');
+      const title = encodeURIComponent("Wedding Celebration of Nishant & Shweta");
+      const details = encodeURIComponent("Together with our families, we joyfully invite you to celebrate our royal wedding!\n\nTiming: 12:00 PM Onwards\nVenue: Bhanushali Wadi Banquet Hall, Nerul East, Navi Mumbai");
+      const location = encodeURIComponent("Bhanushali Wadi Banquet Hall, Basteshwar Maharaj Marg, Sector 10A, Nerul East, Navi Mumbai 400706");
+      const startIso = "20261212T063000Z";
+      const endIso = "20261212T173000Z";
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startIso}/${endIso}&details=${details}&location=${location}`;
+      window.open(url, '_blank');
+      showToast('Opening Google Calendar...');
     });
   }
 
-  if (btnIcal) {
-    btnIcal.addEventListener('click', () => {
+  const btnICal = document.getElementById('btn-add-ical');
+  if (btnICal) {
+    btnICal.addEventListener('click', () => {
       const icsData = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//Nishant and Shweta Wedding//EN',
+        'PRODID:-//Nishant and Shweta//Wedding Invitation//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
         'BEGIN:VEVENT',
-        'UID:wedding-nishant-shweta-20261212@invitation',
-        'DTSTAMP:20261024T120000Z',
+        'UID:nishant-shweta-wedding-2026@wedding.invitation',
+        'DTSTAMP:20261212T000000Z',
         'DTSTART:20261212T063000Z',
         'DTEND:20261212T173000Z',
-        'SUMMARY:Wedding of Nishant & Shweta',
-        'DESCRIPTION:We joyfully invite you to celebrate our wedding ceremony at Bhanushali Wadi Banquet Hall, Nerul Navi Mumbai.',
-        'LOCATION:Bhanushali Wadi Banquet Hall, Basteshwar Maharaj Marg, Nerul East, Sector 10A, Nerul, Navi Mumbai, Maharashtra 400706',
+        'SUMMARY:Nishant & Shweta Royal Wedding',
+        'DESCRIPTION:Together with our families, we joyfully invite you to celebrate the wedding of Nishant & Shweta.',
+        'LOCATION:Bhanushali Wadi Banquet Hall, Nerul East, Navi Mumbai 400706',
+        'STATUS:CONFIRMED',
         'END:VEVENT',
         'END:VCALENDAR'
       ].join('\r\n');
@@ -487,160 +374,345 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      showToast('Downloaded Wedding Calendar Invite (.ics)!');
     });
   }
 
-  // --- 9. COPY VENUE ADDRESS ---
+  // --- 10. COPY ADDRESS & COPY LINK WITH ROYAL TOAST ---
+  function showToast(message) {
+    if (!toastBox || !toastMsg) return;
+    toastMsg.textContent = message;
+    toastBox.classList.add('show');
+    clearTimeout(toastBox._timeout);
+    toastBox._timeout = setTimeout(() => {
+      toastBox.classList.remove('show');
+    }, 3200);
+  }
+
   const btnCopyAddress = document.getElementById('btn-copy-address');
   if (btnCopyAddress) {
     btnCopyAddress.addEventListener('click', () => {
       const address = "Bhanushali Wadi Banquet Hall, Basteshwar Maharaj Marg, Nerul East, Sector 10A, Nerul, Navi Mumbai, Maharashtra 400706";
       navigator.clipboard.writeText(address).then(() => {
-        showToast("Address copied to clipboard!");
+        showToast('Venue Address Copied to Clipboard! ✦');
+      }).catch(() => {
+        showToast('Venue: Bhanushali Wadi Banquet Hall, Nerul East');
       });
     });
   }
 
-  function showToast(msg) {
-    const existing = document.querySelector('.royal-toast');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = 'royal-toast';
-    toast.textContent = msg;
-    document.body.appendChild(toast);
-
-    setTimeout(() => toast.classList.add('visible'), 50);
-    setTimeout(() => {
-      toast.classList.remove('visible');
-      setTimeout(() => toast.remove(), 400);
-    }, 2800);
-  }
-
-  // --- 10. DRESS CODE INTERACTIVE SWATCHES ---
-  const colorSwatches = document.querySelectorAll('.palette-chip');
-  const dressCodeHint = document.getElementById('dress-code-dynamic-hint');
-
-  const dressHints = {
-    emerald: "Royal Emerald Green: Elegant, majestic, and auspicious for both kurtas and sarees/lehengas.",
-    champagne: "Champagne Ivory: Subtle, luminous, and pairs gorgeously with gold temple jewelry.",
-    gold: "Golden Sand & Brass: Rich traditional royalty that glimmers beautifully under evening chandeliers.",
-    rose: "Pastel Rose Blush: Romantic and gentle, echoing the bride's regal palace walk lehenga.",
-    rust: "Terracotta & Royal Rust: Warm autumnal depth, rich in festive heritage vibrancy."
-  };
-
-  colorSwatches.forEach(chip => {
-    chip.addEventListener('click', () => {
-      colorSwatches.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const colorKey = chip.getAttribute('data-color');
-      if (dressCodeHint && dressHints[colorKey]) {
-        dressCodeHint.textContent = dressHints[colorKey];
-      }
-    });
-  });
-
-  // --- 11. GALLERY LIGHTBOX ---
-  const lightbox = document.getElementById('gallery-lightbox');
-  const lightboxImg = document.getElementById('lightbox-image');
-  const lightboxCaption = document.getElementById('lightbox-caption');
-  const lightboxClose = document.getElementById('lightbox-close');
-
-  document.querySelectorAll('.gallery-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const src = item.getAttribute('data-full');
-      const caption = item.getAttribute('data-caption') || 'Nishant & Shweta';
-      if (lightbox && lightboxImg) {
-        lightboxImg.src = src;
-        if (lightboxCaption) lightboxCaption.textContent = caption;
-        lightbox.classList.add('active');
-      }
-    });
-  });
-
-  if (lightboxClose) {
-    lightboxClose.addEventListener('click', () => {
-      lightbox.classList.remove('active');
+  const btnCopyLink = document.getElementById('btn-copy-invite-link');
+  if (btnCopyLink) {
+    btnCopyLink.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Invitation Link Copied to Clipboard! ✦');
+      }).catch(() => {
+        showToast('Share link copied!');
+      });
     });
   }
 
-  if (lightbox) {
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) lightbox.classList.remove('active');
-    });
-  }
-
-  // --- 12. SHARING (WhatsApp & Copy Link) ---
+  // --- 11. WHATSAPP SHARE ---
   const btnShareWhatsApp = document.getElementById('btn-share-whatsapp');
-  const btnCopyInviteLink = document.getElementById('btn-copy-invite-link');
-
   if (btnShareWhatsApp) {
     btnShareWhatsApp.addEventListener('click', () => {
-      const text = `🌸 *Wedding Invitation: Nishant & Shweta* 🌸\n\nWith the blessings of our families, we joyfully invite you to celebrate our wedding on *Saturday, 12 December 2026* at *Bhanushali Wadi Banquet Hall, Nerul, Navi Mumbai*.\n\nPlease open our interactive wedding invitation card here:\n${window.location.href}`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      const inviteUrl = window.location.href;
+      const text = encodeURIComponent(
+        `॥ श्री गणेशाय नमः ॥\n\n` +
+        `Together with our families, we joyfully invite you to celebrate the wedding of\n` +
+        `*Nishant & Shweta*\n\n` +
+        `🗓 Date: Saturday, 12 December 2026\n` +
+        `⏰ Timing: 12:00 PM Onwards\n` +
+        `📍 Venue: Bhanushali Wadi Banquet Hall, Nerul East, Navi Mumbai\n\n` +
+        `Open our royal interactive wedding card:\n${inviteUrl}`
+      );
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
     });
   }
 
-  if (btnCopyInviteLink) {
-    btnCopyInviteLink.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        showToast("Invitation link copied to clipboard!");
-      });
+  // --- 12. INTERACTIVE DIYA FLOATING ON THE LAKE ---
+  const btnFloatDiya = document.getElementById('btn-float-diya');
+  const diyasLakeArea = document.getElementById('diyas-lake-area');
+  let diyaCount = 0;
+
+  if (btnFloatDiya && diyasLakeArea) {
+    btnFloatDiya.addEventListener('click', () => {
+      diyaCount++;
+      spawnFloatingDiya();
+
+      const diyaHint = document.getElementById('diya-hint');
+      if (diyaHint) {
+        diyaHint.textContent = `✦ ${diyaCount} sacred diya${diyaCount > 1 ? 's' : ''} shining bright upon the lake ✦`;
+      }
+
+      showToast('Diya illuminated & floating on the lake! 🪔');
+      goldDust.burstGentle(50);
     });
   }
 
-  // --- 13. INTERACTIVE MODAL CONTROLS ---
-  // RSVP Modal
-  const rsvpModal = document.getElementById('rsvp-modal');
-  const btnTriggerRsvp = document.getElementById('btn-trigger-rsvp-modal');
-  const rsvpCloseBtn = document.getElementById('rsvp-modal-close');
+  function spawnFloatingDiya() {
+    if (!diyasLakeArea) return;
 
-  if (btnTriggerRsvp && rsvpModal) {
-    btnTriggerRsvp.addEventListener('click', (e) => {
-      e.stopPropagation();
-      rsvpModal.classList.add('active');
-    });
-  }
-  if (rsvpCloseBtn && rsvpModal) {
-    rsvpCloseBtn.addEventListener('click', () => {
-      rsvpModal.classList.remove('active');
-    });
-  }
-  if (rsvpModal) {
-    rsvpModal.addEventListener('click', (e) => {
-      if (e.target === rsvpModal) rsvpModal.classList.remove('active');
-    });
-  }
+    const diya = document.createElement('div');
+    diya.className = 'floating-diya-entity';
 
-  // Blessings Modal
-  const blessingsModal = document.getElementById('blessings-modal');
-  const btnTriggerBlessings = document.getElementById('btn-trigger-blessings-modal');
-  const blessingsCloseBtn = document.getElementById('blessings-modal-close');
+    // Randomize initial water position
+    const startX = 10 + Math.random() * 60; // 10% to 70%
+    const startY = 40 + Math.random() * 45; // 40% to 85%
+    const scale = 0.65 + Math.random() * 0.45;
+    const duration = 8 + Math.random() * 5;
 
-  if (btnTriggerBlessings && blessingsModal) {
-    btnTriggerBlessings.addEventListener('click', (e) => {
-      e.stopPropagation();
-      blessingsModal.classList.add('active');
-    });
-  }
-  if (blessingsCloseBtn && blessingsModal) {
-    blessingsCloseBtn.addEventListener('click', () => {
-      blessingsModal.classList.remove('active');
-    });
-  }
-  if (blessingsModal) {
-    blessingsModal.addEventListener('click', (e) => {
-      if (e.target === blessingsModal) blessingsModal.classList.remove('active');
-    });
+    diya.style.left = `${startX}%`;
+    diya.style.top = `${startY}%`;
+    diya.style.transform = `scale(${scale})`;
+    diya.style.animationDuration = `${duration}s`;
+
+    diya.innerHTML = `
+      <div class="diya-flame-glow"></div>
+      <div class="diya-base-clay"></div>
+      <div class="diya-water-ripple"></div>
+    `;
+
+    diyasLakeArea.appendChild(diya);
+
+    // Remove when drift finishes
+    setTimeout(() => {
+      diya.remove();
+    }, duration * 1000);
   }
 
-  // Gallery Zoom Trigger
-  const btnOpenGalleryZoom = document.getElementById('btn-open-gallery-zoom');
-  if (btnOpenGalleryZoom && lightbox) {
-    btnOpenGalleryZoom.addEventListener('click', (e) => {
-      e.stopPropagation();
-      lightbox.classList.add('active');
-    });
-  }
 });
 
+/**
+ * ========================================================
+ * GOLD DUST ENGINE
+ * High-performance HTML5 Canvas particle system for
+ * spectacular "dust away and come back" transitions
+ * ========================================================
+ */
+class GoldDustEngine {
+  constructor(canvasId) {
+    this.canvas = document.getElementById(canvasId);
+    if (!this.canvas) return;
+    this.ctx = this.canvas.getContext('2d');
+    this.particles = [];
+    this.ambientParticles = [];
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
+    this.animId = null;
+
+    this.colors = [
+      '#FFFDF9',
+      '#FFF0C7',
+      '#F5D37E',
+      '#D4AF37',
+      '#B2872A'
+    ];
+
+    this.init();
+  }
+
+  init() {
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+
+    // Spawn subtle ambient golden dust specks in the air
+    for (let i = 0; i < 35; i++) {
+      this.ambientParticles.push(this.createAmbientParticle());
+    }
+
+    this.animate();
+  }
+
+  resize() {
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+  }
+
+  createAmbientParticle() {
+    return {
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      size: 0.8 + Math.random() * 1.6,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: -0.2 - Math.random() * 0.5,
+      alpha: 0.2 + Math.random() * 0.5,
+      color: this.colors[Math.floor(Math.random() * this.colors.length)],
+      twinkleSpeed: 0.02 + Math.random() * 0.03,
+      twinklePhase: Math.random() * Math.PI * 2
+    };
+  }
+
+  // Trigger: Content dusts away upwards & disperses
+  burstScatter(direction = 'upwards', count = 150) {
+    const centerX = this.width * 0.5;
+    const centerY = this.height * 0.45;
+
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 9;
+      this.particles.push({
+        x: centerX + (Math.random() - 0.5) * (this.width * 0.6),
+        y: centerY + (Math.random() - 0.5) * (this.height * 0.4),
+        vx: Math.cos(angle) * speed * 0.8,
+        vy: -Math.abs(Math.sin(angle) * speed * 1.2) - (direction === 'upwards' ? 2 : 0),
+        size: 1.5 + Math.random() * 3.5,
+        alpha: 0.95,
+        decay: 0.012 + Math.random() * 0.018,
+        color: this.colors[Math.floor(Math.random() * this.colors.length)],
+        gravity: -0.05,
+        spin: (Math.random() - 0.5) * 0.2
+      });
+    }
+  }
+
+  // Trigger: Gold dust particles converge back from perimeters to assemble content
+  burstCoalesce(count = 160) {
+    const centerX = this.width * 0.5;
+    const centerY = this.height * 0.45;
+
+    for (let i = 0; i < count; i++) {
+      const spawnX = Math.random() < 0.5 ? (Math.random() * this.width) : (Math.random() < 0.5 ? 0 : this.width);
+      const spawnY = Math.random() < 0.5 ? 0 : (Math.random() * this.height);
+      const targetX = centerX + (Math.random() - 0.5) * 350;
+      const targetY = centerY + (Math.random() - 0.5) * 350;
+
+      const dx = targetX - spawnX;
+      const dy = targetY - spawnY;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const speed = 7 + Math.random() * 7;
+
+      this.particles.push({
+        x: spawnX,
+        y: spawnY,
+        vx: (dx / dist) * speed,
+        vy: (dy / dist) * speed,
+        size: 1.8 + Math.random() * 3,
+        alpha: 0.9,
+        decay: 0.018 + Math.random() * 0.015,
+        color: this.colors[Math.floor(Math.random() * this.colors.length)],
+        gravity: 0,
+        spin: 0
+      });
+    }
+  }
+
+  // Trigger: Date Seal Shockwave Pulse Burst
+  burstShockwave() {
+    const centerX = this.width * 0.5;
+    const centerY = this.height * 0.5;
+    const count = 90;
+
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2;
+      const speed = 4 + Math.random() * 5;
+      this.particles.push({
+        x: centerX,
+        y: centerY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 2 + Math.random() * 2.5,
+        alpha: 1,
+        decay: 0.02,
+        color: '#F5D37E',
+        gravity: 0.02,
+        spin: 0
+      });
+    }
+  }
+
+  // Trigger: Gentle festive celebration sparkle
+  burstGentle(count = 40) {
+    const centerX = this.width * 0.5;
+    const centerY = this.height * 0.6;
+
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 1.5 + Math.random() * 4;
+      this.particles.push({
+        x: centerX + (Math.random() - 0.5) * 200,
+        y: centerY + (Math.random() - 0.5) * 100,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 1.5,
+        size: 1.2 + Math.random() * 2,
+        alpha: 0.9,
+        decay: 0.025,
+        color: this.colors[Math.floor(Math.random() * this.colors.length)],
+        gravity: 0.05,
+        spin: 0
+      });
+    }
+  }
+
+  update() {
+    // 1. Update Transition Explosion Particles
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= 0.98;
+      p.alpha -= p.decay;
+
+      if (p.alpha <= 0) {
+        this.particles.splice(i, 1);
+      }
+    }
+
+    // 2. Update Ambient Floating Dust
+    for (let i = 0; i < this.ambientParticles.length; i++) {
+      const p = this.ambientParticles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.twinklePhase += p.twinkleSpeed;
+
+      if (p.y < -10) {
+        p.y = this.height + 10;
+        p.x = Math.random() * this.width;
+      }
+      if (p.x < -10) p.x = this.width + 10;
+      if (p.x > this.width + 10) p.x = -10;
+    }
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+
+    // 1. Draw Ambient Floating Dust
+    for (let i = 0; i < this.ambientParticles.length; i++) {
+      const p = this.ambientParticles[i];
+      const currentAlpha = p.alpha * (0.5 + 0.5 * Math.sin(p.twinklePhase));
+
+      this.ctx.save();
+      this.ctx.globalAlpha = currentAlpha;
+      this.ctx.fillStyle = p.color;
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.restore();
+    }
+
+    // 2. Draw Transition Explosion Particles with Glow
+    for (let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+
+      this.ctx.save();
+      this.ctx.globalAlpha = p.alpha;
+      this.ctx.fillStyle = p.color;
+      this.ctx.shadowColor = '#D4AF37';
+      this.ctx.shadowBlur = 8;
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.restore();
+    }
+  }
+
+  animate() {
+    this.update();
+    this.draw();
+    this.animId = requestAnimationFrame(() => this.animate());
+  }
+}

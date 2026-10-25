@@ -8,6 +8,7 @@ find_rows.ps1
 get_dims.ps1
 scan_borders.ps1
 scratch*/
+temp_vercel_plugin/
 *.log
 .DS_Store
 Thumbs.db
