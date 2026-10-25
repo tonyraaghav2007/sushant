@@ -1,17 +1,16 @@
 /**
  * Nishant & Shweta Royal Wedding Invitation
- * Full-Screen Scrollytelling Engine, Bespoke Scene Transitions,
- * Gold Dust Dissolution Particle Canvas & Interactive Features
+ * High-Performance Full-Screen Scrollytelling Engine
+ * Zero-Lag Transitions • Optimized for Vertical Displays • GPU Accelerated
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- 1. INITIALIZE CANVAS PARTICLES & ENGINES ---
   const petals = new window.PetalShower('petals-canvas');
-  const goldDust = new GoldDustEngine('dust-canvas');
+  const goldDust = new FastGoldDustEngine('dust-canvas');
 
   // --- 2. DOM ELEMENTS ---
-  const scrollDriver = document.getElementById('scroll-driver');
   const scrollProgressLine = document.getElementById('scroll-progress-line');
   const scenePanels = Array.from(document.querySelectorAll('.scene-panel'));
   const railDots = Array.from(document.querySelectorAll('.rail-dot'));
@@ -24,10 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const totalScenes = scenePanels.length; // 8 scenes: 0 to 7
   let currentSceneIndex = 0;
-  let isNavigating = false;
+  let isTransitioning = false;
   let hasUserScrolled = false;
 
-  // --- 3. SCROLL PROGRESS & SCENE STATE MACHINE ---
+  // --- 3. HIGH PERFORMANCE SCROLL ENGINE ---
   function updateScrollState() {
     const scrollY = window.scrollY || window.pageYOffset;
     const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
@@ -39,29 +38,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Hide initial scroll prompt after first gesture
-    if (!hasUserScrolled && scrollY > 40) {
+    if (!hasUserScrolled && scrollY > 30) {
       hasUserScrolled = true;
       if (scrollPrompt) scrollPrompt.classList.add('fade-out');
-    } else if (scrollY <= 20 && hasUserScrolled) {
+    } else if (scrollY <= 15 && hasUserScrolled) {
       hasUserScrolled = false;
       if (scrollPrompt) scrollPrompt.classList.remove('fade-out');
     }
 
     // Map progress to active scene index (0 to 7)
-    // Using smooth threshold zones
     const stepSize = 1 / totalScenes;
     let targetIndex = Math.floor(rawProgress / stepSize);
     if (targetIndex >= totalScenes) targetIndex = totalScenes - 1;
 
-    if (targetIndex !== currentSceneIndex) {
-      transitionToScene(targetIndex, targetIndex > currentSceneIndex ? 'down' : 'up');
+    if (targetIndex !== currentSceneIndex && !isTransitioning) {
+      transitionToScene(targetIndex);
     }
   }
 
-  // --- 4. BESPOKE SCENE TRANSITIONS ---
-  function transitionToScene(newIndex, direction) {
-    if (newIndex < 0 || newIndex >= totalScenes) return;
+  // --- 4. BESPOKE SCENE TRANSITIONS (ZERO-LAG GPU DRIVEN) ---
+  function transitionToScene(newIndex) {
+    if (newIndex < 0 || newIndex >= totalScenes || newIndex === currentSceneIndex) return;
 
+    isTransitioning = true;
     const oldIndex = currentSceneIndex;
     const oldScene = scenePanels[oldIndex];
     const newScene = scenePanels[newIndex];
@@ -72,12 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
       dot.classList.toggle('active', idx === newIndex);
     });
 
-    // Play subtle paper rustle / ceremonial sound effect
+    // Play subtle paper rustle
     if (window.weddingAudio && typeof window.weddingAudio.playPaperRustle === 'function') {
       window.weddingAudio.playPaperRustle();
     }
 
-    // Clear previous transition animation classes
+    // Clear previous animation classes
     scenePanels.forEach(panel => {
       panel.classList.remove(
         'transition-out-dust', 'transition-in-dust',
@@ -94,20 +93,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // SCENE 0 SPECIFIC: GOLD DUST DISSOLUTION ("dusts away and comes back")
     if (oldIndex === 0 && newIndex > 0) {
       oldScene.classList.add('transition-out-dust');
-      goldDust.burstScatter('upwards', 160);
+      goldDust.burstScatter('upwards', 70);
     } else if (newIndex === 0 && oldIndex > 0) {
       newScene.classList.add('transition-in-dust');
-      goldDust.burstCoalesce(180);
+      goldDust.burstCoalesce(70);
     }
 
-    // SCENE 1 SPECIFIC: 3D DEPTH ZOOM & LENS BLUR
+    // SCENE 1 SPECIFIC: 3D DEPTH ZOOM
     if (newIndex === 1) {
       newScene.classList.add('transition-in-zoom');
     } else if (oldIndex === 1) {
       oldScene.classList.add('transition-out-zoom');
     }
 
-    // SCENE 2 SPECIFIC: ROYAL SEAL STAMP & SHOCKWAVE PULSE
+    // SCENE 2 SPECIFIC: SEAL STAMP & SHOCKWAVE PULSE
     if (newIndex === 2) {
       newScene.classList.add('transition-in-stamp');
       goldDust.burstShockwave();
@@ -115,21 +114,21 @@ document.addEventListener('DOMContentLoaded', () => {
       oldScene.classList.add('transition-out-stamp');
     }
 
-    // SCENE 3 SPECIFIC: ARCHITECTURAL GATES REVEAL
+    // SCENE 3 SPECIFIC: ARCH GATES REVEAL
     if (newIndex === 3) {
       newScene.classList.add('transition-in-arch');
     } else if (oldIndex === 3) {
       oldScene.classList.add('transition-out-arch');
     }
 
-    // SCENE 4 SPECIFIC: VINTAGE POLAROID TILT DRIFT
+    // SCENE 4 SPECIFIC: POLAROID TILT DRIFT
     if (newIndex === 4) {
       newScene.classList.add('transition-in-drift');
     } else if (oldIndex === 4) {
       oldScene.classList.add('transition-out-drift');
     }
 
-    // SCENE 5 SPECIFIC: TIMELINE CASCADE STAGGER
+    // SCENE 5 SPECIFIC: TIMELINE CASCADE
     if (newIndex === 5) {
       newScene.classList.add('transition-in-stagger');
     } else if (oldIndex === 5) {
@@ -143,36 +142,36 @@ document.addEventListener('DOMContentLoaded', () => {
       oldScene.classList.add('transition-out-bloom');
     }
 
-    // SCENE 7 SPECIFIC: TWILIGHT LAKE DIYA GLOW
+    // SCENE 7 SPECIFIC: TWILIGHT LAKE FINALE
     if (newIndex === 7) {
       newScene.classList.add('transition-in-diya');
-      goldDust.burstGentle(80);
+      goldDust.burstGentle(35);
     }
 
-    // Activate the new panel and deactivate others
+    // Toggle active state
     scenePanels.forEach((panel, idx) => {
       panel.classList.toggle('active', idx === newIndex);
     });
+
+    // Release lock after transition duration
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 380);
   }
 
-  // --- 5. SMOOTH NAVIGATION CONTROLS ---
+  // --- 5. SMOOTH NAVIGATION ---
   function scrollToSceneIndex(index) {
     if (index < 0 || index >= totalScenes) return;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const targetScrollY = (index / (totalScenes - 1)) * maxScroll;
 
-    isNavigating = true;
     window.scrollTo({
       top: targetScrollY,
       behavior: 'smooth'
     });
-
-    setTimeout(() => {
-      isNavigating = false;
-    }, 700);
   }
 
-  // Rail dot clicks
+  // Rail dots
   railDots.forEach(dot => {
     dot.addEventListener('click', () => {
       const targetIdx = parseInt(dot.getAttribute('data-index'), 10);
@@ -180,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Chapter jump pills (e.g. on Scene 1)
+  // Chapter jump pills
   document.querySelectorAll('[data-jump]').forEach(pill => {
     pill.addEventListener('click', () => {
       const jumpIdx = parseInt(pill.getAttribute('data-jump'), 10);
@@ -188,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // "Explore Invitation" button on Scene 0
+  // Explore button on Scene 0
   const beginScrollBtn = document.getElementById('btn-begin-scroll');
   if (beginScrollBtn) {
     beginScrollBtn.addEventListener('click', () => {
@@ -196,18 +195,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Keyboard navigation (Arrow keys, PageUp/Down)
+  // Keyboard navigation
   window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
       e.preventDefault();
-      if (currentSceneIndex < totalScenes - 1) {
-        scrollToSceneIndex(currentSceneIndex + 1);
-      }
+      if (currentSceneIndex < totalScenes - 1) scrollToSceneIndex(currentSceneIndex + 1);
     } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
       e.preventDefault();
-      if (currentSceneIndex > 0) {
-        scrollToSceneIndex(currentSceneIndex - 1);
-      }
+      if (currentSceneIndex > 0) scrollToSceneIndex(currentSceneIndex - 1);
     } else if (e.key === 'Home') {
       e.preventDefault();
       scrollToSceneIndex(0);
@@ -217,42 +212,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Native scroll listener with RAF throttle
-  let ticking = false;
+  // Throttled native scroll listener with RAF
+  let scrollTicking = false;
   window.addEventListener('scroll', () => {
-    if (!ticking) {
+    if (!scrollTicking) {
       window.requestAnimationFrame(() => {
         updateScrollState();
-        ticking = false;
+        scrollTicking = false;
       });
-      ticking = true;
+      scrollTicking = true;
     }
   }, { passive: true });
 
-  // Initial scroll calculation
   updateScrollState();
 
-  // --- 6. GOLD FOIL SPECULAR GLINT & GYROSCOPE ---
+  // --- 6. GLINT FOIL CURSOR (RAF Throttled) ---
+  let glintTicking = false;
   window.addEventListener('mousemove', (e) => {
-    const glintX = Math.round((e.clientX / window.innerWidth) * 100);
-    const glintY = Math.round((e.clientY / window.innerHeight) * 100);
-    if (foilGlint) {
-      foilGlint.style.setProperty('--glint-x', `${glintX}%`);
-      foilGlint.style.setProperty('--glint-y', `${glintY}%`);
+    if (!glintTicking && foilGlint) {
+      window.requestAnimationFrame(() => {
+        const glintX = Math.round((e.clientX / window.innerWidth) * 100);
+        const glintY = Math.round((e.clientY / window.innerHeight) * 100);
+        foilGlint.style.setProperty('--glint-x', `${glintX}%`);
+        foilGlint.style.setProperty('--glint-y', `${glintY}%`);
+        glintTicking = false;
+      });
+      glintTicking = true;
     }
   }, { passive: true });
 
   if (window.DeviceOrientationEvent) {
     window.addEventListener('deviceorientation', (e) => {
-      if (e.gamma === null || e.beta === null) return;
-      const clampGamma = Math.max(-30, Math.min(30, e.gamma));
-      const clampBeta = Math.max(10, Math.min(60, e.beta)) - 35;
-      const glintX = Math.round(50 + (clampGamma / 30) * 40);
-      const glintY = Math.round(35 + (clampBeta / 25) * 40);
-      if (foilGlint) {
-        foilGlint.style.setProperty('--glint-x', `${glintX}%`);
-        foilGlint.style.setProperty('--glint-y', `${glintY}%`);
-      }
+      if (e.gamma === null || e.beta === null || !foilGlint) return;
+      const clampGamma = Math.max(-25, Math.min(25, e.gamma));
+      const clampBeta = Math.max(10, Math.min(55, e.beta)) - 30;
+      const glintX = Math.round(50 + (clampGamma / 25) * 35);
+      const glintY = Math.round(35 + (clampBeta / 25) * 35);
+      foilGlint.style.setProperty('--glint-x', `${glintX}%`);
+      foilGlint.style.setProperty('--glint-y', `${glintY}%`);
     }, { passive: true });
   }
 
@@ -274,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // User interaction audio unlock
+  // User gesture audio auto-start
   const unlockAudioOnGesture = () => {
     if (window.weddingAudio && !window.weddingAudio.isPlaying) {
       window.weddingAudio.startMusic();
@@ -296,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 8. REAL-TIME LIVE WEDDING COUNTDOWN ---
+  // --- 8. REAL-TIME COUNTDOWN TIMER ---
   const weddingDate = new Date('2026-12-12T12:00:00+05:30').getTime();
 
   function updateCountdown() {
@@ -378,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 10. COPY ADDRESS & COPY LINK WITH ROYAL TOAST ---
+  // --- 10. COPY ACTIONS & TOAST NOTIFICATION ---
   function showToast(message) {
     if (!toastBox || !toastMsg) return;
     toastMsg.textContent = message;
@@ -386,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(toastBox._timeout);
     toastBox._timeout = setTimeout(() => {
       toastBox.classList.remove('show');
-    }, 3200);
+    }, 2800);
   }
 
   const btnCopyAddress = document.getElementById('btn-copy-address');
@@ -430,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 12. INTERACTIVE DIYA FLOATING ON THE LAKE ---
+  // --- 12. FLOATING DIYAS ON LAKE FINALE ---
   const btnFloatDiya = document.getElementById('btn-float-diya');
   const diyasLakeArea = document.getElementById('diyas-lake-area');
   let diyaCount = 0;
@@ -446,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       showToast('Diya illuminated & floating on the lake! 🪔');
-      goldDust.burstGentle(50);
+      goldDust.burstGentle(25);
     });
   }
 
@@ -456,11 +453,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const diya = document.createElement('div');
     diya.className = 'floating-diya-entity';
 
-    // Randomize initial water position
-    const startX = 10 + Math.random() * 60; // 10% to 70%
-    const startY = 40 + Math.random() * 45; // 40% to 85%
+    const startX = 10 + Math.random() * 60;
+    const startY = 35 + Math.random() * 45;
     const scale = 0.65 + Math.random() * 0.45;
-    const duration = 8 + Math.random() * 5;
+    const duration = 8 + Math.random() * 4;
 
     diya.style.left = `${startX}%`;
     diya.style.top = `${startY}%`;
@@ -475,7 +471,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     diyasLakeArea.appendChild(diya);
 
-    // Remove when drift finishes
     setTimeout(() => {
       diya.remove();
     }, duration * 1000);
@@ -485,12 +480,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * ========================================================
- * GOLD DUST ENGINE
- * High-performance HTML5 Canvas particle system for
- * spectacular "dust away and come back" transitions
+ * FAST GOLD DUST ENGINE (Zero shadowBlur Lag, Pure 60fps)
  * ========================================================
  */
-class GoldDustEngine {
+class FastGoldDustEngine {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) return;
@@ -505,8 +498,7 @@ class GoldDustEngine {
       '#FFFDF9',
       '#FFF0C7',
       '#F5D37E',
-      '#D4AF37',
-      '#B2872A'
+      '#D4AF37'
     ];
 
     this.init();
@@ -514,10 +506,10 @@ class GoldDustEngine {
 
   init() {
     this.resize();
-    window.addEventListener('resize', () => this.resize());
+    window.addEventListener('resize', () => this.resize(), { passive: true });
 
-    // Spawn subtle ambient golden dust specks in the air
-    for (let i = 0; i < 35; i++) {
+    // 20 ambient lightweight particles
+    for (let i = 0; i < 20; i++) {
       this.ambientParticles.push(this.createAmbientParticle());
     }
 
@@ -535,49 +527,46 @@ class GoldDustEngine {
     return {
       x: Math.random() * this.width,
       y: Math.random() * this.height,
-      size: 0.8 + Math.random() * 1.6,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: -0.2 - Math.random() * 0.5,
-      alpha: 0.2 + Math.random() * 0.5,
-      color: this.colors[Math.floor(Math.random() * this.colors.length)],
-      twinkleSpeed: 0.02 + Math.random() * 0.03,
-      twinklePhase: Math.random() * Math.PI * 2
+      size: 0.8 + Math.random() * 1.4,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: -0.2 - Math.random() * 0.4,
+      alpha: 0.2 + Math.random() * 0.4,
+      color: this.colors[Math.floor(Math.random() * this.colors.length)]
     };
   }
 
-  // Trigger: Content dusts away upwards & disperses
-  burstScatter(direction = 'upwards', count = 150) {
+  // Trigger: Content dusts away upwards
+  burstScatter(direction = 'upwards', count = 70) {
     const centerX = this.width * 0.5;
     const centerY = this.height * 0.45;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 9;
+      const speed = 2 + Math.random() * 7;
       this.particles.push({
-        x: centerX + (Math.random() - 0.5) * (this.width * 0.6),
+        x: centerX + (Math.random() - 0.5) * (this.width * 0.65),
         y: centerY + (Math.random() - 0.5) * (this.height * 0.4),
-        vx: Math.cos(angle) * speed * 0.8,
-        vy: -Math.abs(Math.sin(angle) * speed * 1.2) - (direction === 'upwards' ? 2 : 0),
-        size: 1.5 + Math.random() * 3.5,
+        vx: Math.cos(angle) * speed * 0.7,
+        vy: -Math.abs(Math.sin(angle) * speed * 1.1) - (direction === 'upwards' ? 2 : 0),
+        size: 1.2 + Math.random() * 2.4,
         alpha: 0.95,
-        decay: 0.012 + Math.random() * 0.018,
+        decay: 0.018 + Math.random() * 0.02,
         color: this.colors[Math.floor(Math.random() * this.colors.length)],
-        gravity: -0.05,
-        spin: (Math.random() - 0.5) * 0.2
+        gravity: -0.04
       });
     }
   }
 
-  // Trigger: Gold dust particles converge back from perimeters to assemble content
-  burstCoalesce(count = 160) {
+  // Trigger: Gold dust particles converge back
+  burstCoalesce(count = 70) {
     const centerX = this.width * 0.5;
     const centerY = this.height * 0.45;
 
     for (let i = 0; i < count; i++) {
       const spawnX = Math.random() < 0.5 ? (Math.random() * this.width) : (Math.random() < 0.5 ? 0 : this.width);
       const spawnY = Math.random() < 0.5 ? 0 : (Math.random() * this.height);
-      const targetX = centerX + (Math.random() - 0.5) * 350;
-      const targetY = centerY + (Math.random() - 0.5) * 350;
+      const targetX = centerX + (Math.random() - 0.5) * 260;
+      const targetY = centerY + (Math.random() - 0.5) * 260;
 
       const dx = targetX - spawnX;
       const dy = targetY - spawnY;
@@ -589,65 +578,61 @@ class GoldDustEngine {
         y: spawnY,
         vx: (dx / dist) * speed,
         vy: (dy / dist) * speed,
-        size: 1.8 + Math.random() * 3,
+        size: 1.4 + Math.random() * 2.2,
         alpha: 0.9,
-        decay: 0.018 + Math.random() * 0.015,
+        decay: 0.022 + Math.random() * 0.018,
         color: this.colors[Math.floor(Math.random() * this.colors.length)],
-        gravity: 0,
-        spin: 0
+        gravity: 0
       });
     }
   }
 
-  // Trigger: Date Seal Shockwave Pulse Burst
+  // Trigger: Date Seal Shockwave Pulse
   burstShockwave() {
     const centerX = this.width * 0.5;
     const centerY = this.height * 0.5;
-    const count = 90;
+    const count = 45;
 
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2;
-      const speed = 4 + Math.random() * 5;
+      const speed = 3 + Math.random() * 4.5;
       this.particles.push({
         x: centerX,
         y: centerY,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        size: 2 + Math.random() * 2.5,
+        size: 1.5 + Math.random() * 2,
         alpha: 1,
-        decay: 0.02,
+        decay: 0.025,
         color: '#F5D37E',
-        gravity: 0.02,
-        spin: 0
+        gravity: 0.015
       });
     }
   }
 
   // Trigger: Gentle festive celebration sparkle
-  burstGentle(count = 40) {
+  burstGentle(count = 25) {
     const centerX = this.width * 0.5;
     const centerY = this.height * 0.6;
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 1.5 + Math.random() * 4;
+      const speed = 1.2 + Math.random() * 3;
       this.particles.push({
-        x: centerX + (Math.random() - 0.5) * 200,
-        y: centerY + (Math.random() - 0.5) * 100,
+        x: centerX + (Math.random() - 0.5) * 160,
+        y: centerY + (Math.random() - 0.5) * 80,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 1.5,
-        size: 1.2 + Math.random() * 2,
+        vy: Math.sin(angle) * speed - 1.2,
+        size: 1.2 + Math.random() * 1.8,
         alpha: 0.9,
-        decay: 0.025,
+        decay: 0.03,
         color: this.colors[Math.floor(Math.random() * this.colors.length)],
-        gravity: 0.05,
-        spin: 0
+        gravity: 0.04
       });
     }
   }
 
   update() {
-    // 1. Update Transition Explosion Particles
     for (let i = this.particles.length - 1; i >= 0; i--) {
       const p = this.particles[i];
       p.x += p.vx;
@@ -661,12 +646,10 @@ class GoldDustEngine {
       }
     }
 
-    // 2. Update Ambient Floating Dust
     for (let i = 0; i < this.ambientParticles.length; i++) {
       const p = this.ambientParticles[i];
       p.x += p.vx;
       p.y += p.vy;
-      p.twinklePhase += p.twinkleSpeed;
 
       if (p.y < -10) {
         p.y = this.height + 10;
@@ -680,34 +663,27 @@ class GoldDustEngine {
   draw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
 
-    // 1. Draw Ambient Floating Dust
+    // 1. Ambient particles (fast direct fill, no shadowBlur)
     for (let i = 0; i < this.ambientParticles.length; i++) {
       const p = this.ambientParticles[i];
-      const currentAlpha = p.alpha * (0.5 + 0.5 * Math.sin(p.twinklePhase));
-
-      this.ctx.save();
-      this.ctx.globalAlpha = currentAlpha;
-      this.ctx.fillStyle = p.color;
-      this.ctx.beginPath();
-      this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      this.ctx.fill();
-      this.ctx.restore();
-    }
-
-    // 2. Draw Transition Explosion Particles with Glow
-    for (let i = 0; i < this.particles.length; i++) {
-      const p = this.particles[i];
-
-      this.ctx.save();
       this.ctx.globalAlpha = p.alpha;
       this.ctx.fillStyle = p.color;
-      this.ctx.shadowColor = '#D4AF37';
-      this.ctx.shadowBlur = 8;
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       this.ctx.fill();
-      this.ctx.restore();
     }
+
+    // 2. Transition burst particles (pure fast rendering)
+    for (let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+      this.ctx.globalAlpha = p.alpha;
+      this.ctx.fillStyle = p.color;
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      this.ctx.fill();
+    }
+
+    this.ctx.globalAlpha = 1;
   }
 
   animate() {
