@@ -12,3 +12,4 @@ temp_vercel_plugin/
 *.log
 .DS_Store
 Thumbs.db
+*_old.jpg
