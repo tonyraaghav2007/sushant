@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- 8. REAL-TIME COUNTDOWN TIMER ---
-  const weddingDate = new Date('2026-12-12T12:00:00+05:30').getTime();
+  const weddingDate = new Date('2026-12-12T12:20:00+05:30').getTime();
 
   function updateCountdown() {
     const now = new Date().getTime();
@@ -332,9 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnGoogleCal) {
     btnGoogleCal.addEventListener('click', () => {
       const title = encodeURIComponent("Wedding Celebration of Nishant & Shweta");
-      const details = encodeURIComponent("Together with our families, we joyfully invite you to celebrate our royal wedding!\n\nTiming: 12:00 PM Onwards\nVenue: Bhanushali Wadi Banquet Hall, Nerul East, Navi Mumbai");
+      const details = encodeURIComponent("Together with our families, we joyfully invite you to celebrate our royal wedding!\n\nTiming: 12:20 PM Onwards\nVenue: Bhanushali Wadi Banquet Hall, Nerul East, Navi Mumbai");
       const location = encodeURIComponent("Bhanushali Wadi Banquet Hall, Basteshwar Maharaj Marg, Sector 10A, Nerul East, Navi Mumbai 400706");
-      const startIso = "20261212T063000Z";
+      const startIso = "20261212T065000Z";
       const endIso = "20261212T173000Z";
       const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startIso}/${endIso}&details=${details}&location=${location}`;
       window.open(url, '_blank');
@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'BEGIN:VEVENT',
         'UID:nishant-shweta-wedding-2026@wedding.invitation',
         'DTSTAMP:20261212T000000Z',
-        'DTSTART:20261212T063000Z',
+        'DTSTART:20261212T065000Z',
         'DTEND:20261212T173000Z',
         'SUMMARY:Nishant & Shweta Royal Wedding',
         'DESCRIPTION:Together with our families, we joyfully invite you to celebrate the wedding of Nishant & Shweta.',
@@ -419,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `Together with our families, we joyfully invite you to celebrate the wedding of\n` +
         `*Nishant & Shweta*\n\n` +
         `🗓 Date: Saturday, 12 December 2026\n` +
-        `⏰ Timing: 12:00 PM Onwards\n` +
+        `⏰ Timing: 12:20 PM Onwards\n` +
         `📍 Venue: Bhanushali Wadi Banquet Hall, Nerul East, Navi Mumbai\n\n` +
         `Open our royal interactive wedding card:\n${inviteUrl}`
       );
