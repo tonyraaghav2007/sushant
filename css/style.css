@@ -777,19 +777,46 @@ body {
 }
 
 /* --- 11. TYPOGRAPHY & COMMON ORNAMENTS (REM Based) --- */
+.ganesha-emblem-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.55rem;
+}
+
+.ganesha-halo-ring {
+  position: absolute;
+  width: 3.8rem;
+  height: 3.8rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.28) 0%, rgba(253, 240, 205, 0.12) 55%, transparent 75%);
+  border: 0.08rem dashed rgba(212, 175, 55, 0.5);
+  animation: haloRotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes haloRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .ganesha-emblem {
-  width: 2.8rem;
-  height: 2.8rem;
-  margin-bottom: 0.35rem;
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  filter: drop-shadow(0 0 0.5rem rgba(212, 175, 55, 0.6));
+  z-index: 2;
 }
 
 .shubh-shloka {
   font-family: var(--font-serif-royal);
-  font-size: 1.05rem;
-  letter-spacing: 0.25rem;
+  font-size: 1.18rem;
+  letter-spacing: 0.32rem;
   color: var(--color-maroon-silk);
   font-weight: 700;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.65rem;
+  text-shadow: 0 0.1rem 0.6rem rgba(212, 175, 55, 0.4);
 }
 
 .card-intro-text {
@@ -813,10 +840,13 @@ body {
 
 .groom-name, .bride-name {
   font-family: var(--font-serif-royal);
-  font-size: clamp(1.8rem, 5.5vw, 3.4rem);
-  font-weight: 700;
-  letter-spacing: 0.25rem;
-  color: var(--color-text-emerald);
+  font-size: clamp(2.1rem, 6.2vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: 0.28rem;
+  background: linear-gradient(135deg, #0d3824 0%, #175438 45%, #8a671f 80%, #b5892e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0.12rem 0.3rem rgba(140, 105, 45, 0.3));
   line-height: 1;
 }
 
@@ -879,30 +909,38 @@ body {
   margin: 0.25rem 0 0.6rem;
 }
 
-.cover-quick-meta {
-  font-family: var(--font-serif-royal);
-  font-size: 0.85rem;
-  letter-spacing: 0.12rem;
-  color: var(--color-text-emerald);
-  font-weight: 600;
-  margin: 0.5rem 0 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
+
 
 .meta-sep {
   color: var(--color-gold-primary);
 }
 
+.cover-quick-meta {
+  font-family: var(--font-serif-royal);
+  font-size: 0.82rem;
+  letter-spacing: 0.12rem;
+  color: var(--color-text-emerald);
+  font-weight: 700;
+  margin: 0.5rem 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 253, 248, 0.85);
+  padding: 0.35rem 1rem;
+  border-radius: 1.5rem;
+  border: 0.0625rem solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 0.25rem 0.8rem rgba(180, 140, 60, 0.12);
+}
+
 .palace-sketch-container {
   max-width: 25rem;
-  width: 85%;
-  margin: 0.6rem auto 1rem;
-  border-radius: 0.75rem;
+  width: 86%;
+  margin: 0.65rem auto 1.15rem;
+  border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 0.6rem 1.8rem rgba(180, 140, 60, 0.16);
-  border: 0.09rem solid var(--color-gold-primary);
+  box-shadow: 0 0.8rem 2.2rem rgba(140, 105, 45, 0.28), 0 0 0 0.125rem rgba(212, 175, 55, 0.65);
+  border: 0.125rem solid #FFFDF9;
+  background: #FFFDF9;
 }
 
 .palace-vintage-art {
@@ -910,7 +948,18 @@ body {
   max-height: 22vh;
   object-fit: cover;
   display: block;
-  filter: sepia(0.2) contrast(1.05);
+  filter: sepia(0.12) contrast(1.1) brightness(1.02);
+  transition: transform 0.8s var(--ease-royal);
+}
+
+.btn-scroll-next {
+  box-shadow: 0 0.6rem 2rem rgba(180, 140, 50, 0.42), 0 0 1rem rgba(212, 175, 55, 0.3);
+  animation: pulseGoldCover 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGoldCover {
+  0% { transform: scale(1); box-shadow: 0 0.5rem 1.6rem rgba(180, 140, 50, 0.35); }
+  100% { transform: scale(1.03); box-shadow: 0 0.8rem 2.4rem rgba(180, 140, 50, 0.55), 0 0 1.5rem rgba(212, 175, 55, 0.5); }
 }
 
 .script-intro-heading {
@@ -1367,103 +1416,203 @@ body {
   display: block;
 }
 
-/* --- 17. SCENE 5: WEDDING EVENTS TIMELINE --- */
-.timeline-flow {
-  max-width: 48rem;
-}
-
-.royal-timeline-monument {
-  position: relative;
+/* --- 17. SCENE 5: WEDDING CEREMONY & AUSPICIOUS MUHURAT --- */
+.muhurat-flow {
+  max-width: 38rem;
   width: 100%;
-  margin-top: 1.4rem;
-  padding: 0.5rem 0;
 }
 
-.timeline-gold-chain {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0.125rem;
-  background: var(--grad-gold-foil);
-  z-index: 1;
-}
-
-.timeline-card-item {
+.royal-muhurat-monument {
   position: relative;
-  width: 46%;
+  background: rgba(255, 253, 248, 0.96);
+  border: 0.125rem solid var(--color-gold-primary);
+  border-radius: 1.5rem;
+  padding: 1.6rem 1.8rem 1.4rem;
+  box-shadow: 0 1.2rem 3.5rem rgba(140, 105, 45, 0.22), 0 0 0 0.25rem rgba(212, 175, 55, 0.15);
+  margin-top: 0.85rem;
+  overflow: hidden;
+  text-align: center;
+}
+
+.muhurat-pattern-bg {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.09) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.06) 1.5px, transparent 1.5px);
+  background-size: 24px 24px, 24px 24px;
+  background-position: 0 0, 12px 12px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.muhurat-top-arch {
+  margin: 0 auto 0.6rem;
+  max-width: 20rem;
+}
+
+.muhurat-arch-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.auspicious-shloka-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--grad-gold);
+  color: var(--color-text-emerald);
+  font-family: var(--font-serif-royal);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.18rem;
+  padding: 0.4rem 1.25rem;
+  border-radius: 2rem;
+  box-shadow: 0 0.35rem 1rem rgba(180, 140, 50, 0.25);
   margin-bottom: 1.25rem;
+  position: relative;
   z-index: 2;
 }
 
-.timeline-card-item.left-item {
-  margin-right: auto;
-  text-align: right;
+.pill-sparkle {
+  color: var(--color-maroon-silk);
+  font-size: 0.75rem;
 }
 
-.timeline-card-item.right-item {
-  margin-left: auto;
-  text-align: left;
+.muhurat-clock-dial {
+  position: relative;
+  width: 13.5rem;
+  height: 13.5rem;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
-.timeline-node-bead {
+.mandala-pattern-svg {
   position: absolute;
-  top: 1rem;
-  width: 1rem;
-  height: 1rem;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: rotateMandalaSlow 60s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotateMandalaSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.muhurat-dial-content {
+  position: relative;
+  width: 10rem;
+  height: 10rem;
   border-radius: 50%;
-  background: var(--grad-gold);
-  border: 0.15rem solid #FFFDF9;
-  box-shadow: 0 0 0.6rem rgba(212, 175, 55, 0.8);
-  z-index: 3;
+  background: radial-gradient(circle, #FFFDF9 60%, #FBF5E6 100%);
+  border: 0.125rem solid var(--color-gold-primary);
+  box-shadow: 0 0.5rem 1.8rem rgba(140, 105, 45, 0.2), inset 0 0 1rem rgba(212, 175, 55, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
 }
 
-.timeline-card-item.left-item .timeline-node-bead {
-  right: -9.5%;
-  transform: translateX(50%);
+.muhurat-icon-ornament {
+  color: var(--color-gold-deep);
+  margin-bottom: 0.15rem;
 }
 
-.timeline-card-item.right-item .timeline-node-bead {
-  left: -9.5%;
-  transform: translateX(-50%);
+.muhurat-time-hero {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25rem;
+  line-height: 1;
 }
 
-.timeline-content-card {
-  background: rgba(255, 253, 248, 0.94);
-  border: 0.09rem solid var(--color-gold-primary);
-  border-radius: 1rem;
-  padding: 0.95rem 1.25rem;
-  box-shadow: 0 0.5rem 1.5rem rgba(180, 140, 60, 0.14);
+.time-digits {
+  font-family: var(--font-serif-royal);
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.05rem;
+  color: var(--color-maroon-silk);
+  text-shadow: 0 0.1rem 0.4rem rgba(140, 30, 45, 0.18);
 }
 
-.event-time-pill {
-  display: inline-block;
-  background: var(--grad-gold);
+.time-meridiem {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08rem;
+  color: var(--color-gold-deep);
+}
+
+.muhurat-label-banner {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14rem;
   color: var(--color-text-emerald);
+  margin-top: 0.35rem;
+  border-top: 0.0625rem solid rgba(212, 175, 55, 0.4);
+  padding-top: 0.35rem;
+  width: 80%;
+  text-align: center;
+}
+
+.muhurat-summary-box {
+  position: relative;
+  z-index: 2;
+  margin-top: 0.35rem;
+}
+
+.muhurat-prose {
+  font-family: var(--font-serif-body);
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: var(--color-text-dark);
+  margin-bottom: 0.75rem;
+}
+
+.muhurat-prose strong {
+  color: var(--color-maroon-silk);
+  font-weight: 700;
+}
+
+.muhurat-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.muhurat-meta-row .meta-tag {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14rem;
+  color: var(--color-gold-deep);
+}
+
+.muhurat-meta-row .meta-sub {
   font-family: var(--font-sans);
   font-size: 0.68rem;
-  font-weight: 700;
   letter-spacing: 0.08rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.75rem;
-  margin-bottom: 0.45rem;
-}
-
-.event-title {
-  font-family: var(--font-serif-royal);
-  font-size: 1.05rem;
-  letter-spacing: 0.06rem;
-  color: var(--color-text-emerald);
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-}
-
-.event-desc {
-  font-family: var(--font-serif-body);
-  font-size: 0.98rem;
-  line-height: 1.4;
   color: var(--color-text-muted);
+}
+
+.muhurat-bottom-paisley {
+  margin: 0.85rem auto 0;
+  max-width: 15rem;
+}
+
+.flourish-svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* --- 18. SCENE 6: YOUR PRESENCE IS OUR GIFT --- */
@@ -1855,4 +2004,29 @@ body {
     padding: 0.65rem 1.25rem;
     font-size: 0.72rem;
   }
+}
+
+/* --- RSVP SECTION IN FINALE --- */
+.finale-rsvp-block {
+  margin-top: 1.25rem;
+  background: rgba(255, 253, 248, 0.95);
+  border: 0.09rem solid var(--color-gold-primary);
+  border-radius: 2rem;
+  padding: 0.65rem 1.6rem;
+  box-shadow: 0 0.5rem 1.6rem rgba(180, 140, 60, 0.16);
+  display: inline-block;
+}
+
+.rsvp-content {
+  font-family: var(--font-serif-royal);
+  font-size: 0.98rem;
+  letter-spacing: 0.08rem;
+  color: var(--color-text-emerald);
+}
+
+.rsvp-tag {
+  color: var(--color-gold-deep);
+  font-weight: 700;
+  letter-spacing: 0.14rem;
+  margin-right: 0.4rem;
 }
