@@ -1129,20 +1129,22 @@ body {
   bottom: 0.85rem;
   left: 0.85rem;
   right: 0.85rem;
-  background: rgba(20, 45, 33, 0.9);
+  background: rgba(20, 45, 33, 0.92);
   border: 0.0625rem solid var(--color-gold-primary);
   padding: 0.5rem 0.9rem;
   border-radius: 0.75rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   z-index: 3;
 }
 
 .badge-script {
   font-family: var(--font-script);
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   color: var(--color-gold-bright);
+  text-align: center;
 }
 
 .badge-location {
