@@ -1332,27 +1332,65 @@ body {
   padding-top: 0.6rem;
 }
 
-/* --- 16. SCENE 4: OUR STORY POLAROID --- */
-.story-highlights-badges {
+/* --- 16. SCENE 4: OUR STORY POLAROID (Expanded & Highly Readable) --- */
+.scene-story .scene-inner {
+  max-width: 78rem;
+}
+
+.scene-story .content-flow-split {
+  grid-template-columns: 1.15fr 1fr;
+  gap: 3.8rem;
+  align-items: center;
+}
+
+.scene-story .script-intro-heading {
+  font-size: 2.35rem;
+}
+
+.scene-story .panel-main-title {
+  font-size: clamp(2rem, 4vw, 2.85rem);
+  letter-spacing: 0.22rem;
+}
+
+.scene-story .story-quote {
+  font-size: 2.05rem;
+  margin-top: 0.35rem;
+  line-height: 1.25;
+}
+
+.scene-story .gold-accent-line {
+  width: 4.5rem;
+  height: 0.15rem;
+  margin: 0.4rem 0 0.85rem;
+}
+
+.scene-story .panel-body-prose {
+  font-size: clamp(1.15rem, 1.4vw, 1.28rem);
+  line-height: 1.72;
+  margin-bottom: 0.5rem;
+}
+
+.scene-story .story-highlights-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 0.6rem;
+  gap: 0.85rem;
+  margin-top: 1rem;
 }
 
 .highlight-pill {
-  background: rgba(255, 253, 248, 0.9);
-  border: 0.0625rem solid var(--color-gold-primary);
-  padding: 0.35rem 0.85rem;
-  border-radius: 1.25rem;
+  background: rgba(255, 253, 248, 0.94);
+  border: 0.08rem solid var(--color-gold-primary);
+  padding: 0.45rem 1.15rem;
+  border-radius: 1.5rem;
   font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.06rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08rem;
   color: var(--color-text-emerald);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.45rem;
+  box-shadow: 0 0.25rem 0.8rem rgba(180, 140, 60, 0.12);
 }
 
 .pill-icon {
@@ -1362,24 +1400,30 @@ body {
 .polaroid-drift-card {
   position: relative;
   background: #FFFDF9;
-  padding: 0.85rem 0.85rem 1.4rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1rem 2.8rem rgba(120, 90, 40, 0.22);
+  padding: 1.1rem 1.1rem 1.6rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.4rem 3.5rem rgba(120, 90, 40, 0.25), 0 0 0 0.0625rem rgba(212, 175, 55, 0.35);
   border: 0.0625rem solid rgba(212, 175, 55, 0.4);
   transform: rotate(-1.5deg);
-  max-width: 22rem;
+  max-width: 30rem;
   width: 100%;
+  transition: transform 0.4s var(--ease-royal), box-shadow 0.4s var(--ease-royal);
+}
+
+.polaroid-drift-card:hover {
+  transform: rotate(0deg) scale(1.02);
+  box-shadow: 0 1.8rem 4rem rgba(120, 90, 40, 0.32);
 }
 
 .polaroid-washi-tape {
   position: absolute;
-  top: -0.65rem;
+  top: -0.85rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 6.5rem;
-  height: 1.5rem;
+  width: 8rem;
+  height: 1.75rem;
   background: var(--grad-gold-foil);
-  opacity: 0.85;
+  opacity: 0.88;
   clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
   z-index: 5;
 }
@@ -1388,9 +1432,9 @@ body {
   width: 100%;
   aspect-ratio: 4 / 3;
   height: auto;
-  max-height: 35vh;
+  max-height: 48vh;
   overflow: hidden;
-  border-radius: 0.25rem;
+  border-radius: 0.35rem;
   background: #EFE8DA;
   display: block;
 }
@@ -1403,24 +1447,24 @@ body {
 }
 
 .polaroid-caption {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   text-align: center;
 }
 
 .polaroid-handwriting {
   font-family: var(--font-script);
-  font-size: 1.85rem;
+  font-size: 2.35rem;
   color: var(--color-maroon-silk);
   line-height: 1;
 }
 
 .polaroid-date {
   font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.12rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.16rem;
   color: var(--color-text-muted);
   text-transform: uppercase;
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
   display: block;
 }
 
