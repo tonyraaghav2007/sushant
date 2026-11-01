@@ -1118,10 +1118,12 @@ body {
 
 .hero-photo-img {
   width: 100%;
-  height: 26rem;
+  aspect-ratio: 3 / 4;
+  height: auto;
   max-height: 38vh;
   object-fit: cover;
   display: block;
+  background: #2D2518;
 }
 
 .photo-caption-badge {
@@ -1265,10 +1267,12 @@ body {
 
 .venue-photo-img {
   width: 100%;
-  height: 25rem;
+  aspect-ratio: 4 / 3;
+  height: auto;
   max-height: 38vh;
   object-fit: cover;
   display: block;
+  background: #2D2518;
 }
 
 .venue-photo-badge {
@@ -1382,11 +1386,13 @@ body {
 
 .polaroid-photo-frame {
   width: 100%;
-  height: 22rem;
+  aspect-ratio: 4 / 3;
+  height: auto;
   max-height: 35vh;
   overflow: hidden;
   border-radius: 0.25rem;
   background: #EFE8DA;
+  display: block;
 }
 
 .polaroid-photo-frame img {
@@ -1945,25 +1951,53 @@ body {
     justify-content: center;
   }
 
-  /* Height constrained photos so text fits vertically */
+  /* Height constrained photos with rock-solid aspect ratios for mobile */
   .hero-photo-showcase, .mandap-visual-showcase, .polaroid-drift-card {
     max-width: 18rem;
     margin: 0 auto;
   }
-  .hero-photo-img, .venue-photo-img {
+  .hero-photo-img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
     height: auto;
-    max-height: 25vh;
+    max-height: 26vh;
+    object-fit: cover;
+    display: block;
+    background: #2D2518;
+  }
+  .venue-photo-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    max-height: 26vh;
+    object-fit: cover;
+    display: block;
+    background: #2D2518;
   }
   .polaroid-photo-frame {
+    width: 100%;
+    aspect-ratio: 4 / 3;
     height: auto;
-    max-height: 20vh;
+    max-height: 24vh;
+    display: block;
+  }
+  .polaroid-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .palace-sketch-container {
     max-height: 18vh;
     max-width: 17rem;
   }
   .palace-vintage-art {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
     max-height: 18vh;
+    object-fit: cover;
+    display: block;
   }
   .lake-finale-visual {
     height: auto;

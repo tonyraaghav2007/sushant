@@ -6,6 +6,18 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- 0. INSTANT ASSET PRELOADER (Caches all images immediately) ---
+  const criticalImages = [
+    'assets/images/palace_vintage_sketch.jpg',
+    'assets/images/couple_palace_walk.jpg',
+    'assets/images/wedding_venue_mandap.jpg',
+    'assets/images/couple_romantic_moments.jpg'
+  ];
+  criticalImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
   // --- 1. INITIALIZE CANVAS PARTICLES & ENGINES ---
   const petals = new window.PetalShower('petals-canvas');
   const goldDust = new FastGoldDustEngine('dust-canvas');
